@@ -9,6 +9,7 @@ import Web3 from 'web3'
 */
 ethereum.autoRefreshOnNetworkChange = false
 
+// TODO rewrite this file to async
 let getWeb3 = new Promise(function (resolve, reject) {
   // Check for injected web3 (mist/metamask)
   var web3js = window.ethereum
