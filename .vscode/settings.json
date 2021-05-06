@@ -3,12 +3,13 @@
     "eslint.validate": [
         "javascript",
         "javascriptreact",
+        "typescript",
+        "typescriptreact",
+        "html",
         "vue"
     ],
-    "[vue]": {
-        "editor.defaultFormatter": "dbaeumer.vscode-eslint"
+    "editor.codeActionsOnSave": {
+        "source.fixAll.eslint": true
     },
-    "[jsonc]": {
-        "editor.defaultFormatter": "vscode.json-language-features"
-    },
+    "eslint.format.enable": true,
 }

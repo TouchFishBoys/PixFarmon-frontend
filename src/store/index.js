@@ -18,6 +18,9 @@ export const store = new Vuex.Store({
       web3Copy.isInjected = result.injectedWeb3;
       web3Copy.web3Instance = result.web3;
       state.web3 = web3Copy;
+      ethereum.on('disconnect', () => {
+        console.log('disconnect');
+      });
     },
   },
   actions: {
@@ -29,17 +32,6 @@ export const store = new Vuex.Store({
       }).catch((e) => {
         console.log('error in action registerWeb3', e);
       });
-    },
-    registerWeb3Instance(state, payload) {
-      console.log('registerWeb3instance Mutation being executed', payload);
-      const result = payload;
-      const web3Copy = state.web3;
-      web3Copy.coinbase = result.coinbase;
-      web3Copy.networkId = result.networkId;
-      web3Copy.balance = parseInt(result.balance, 10);
-      web3Copy.isInjected = result.injectedWeb3;
-      web3Copy.web3Instance = result.web3;
-      state.web3 = web3Copy;
     },
   },
 });
