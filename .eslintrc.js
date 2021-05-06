@@ -11,9 +11,9 @@ module.exports = {
   'root': true,
 
   'parserOptions': {
-    ecmaVersion: 12,
-    sourceType: 'module',
-    parser: 'babel-eslint',
+    'ecmaVersion': 12,
+    'sourceType': 'module',
+    'parser': 'babel-eslint',
   },
 
   'rules': {
