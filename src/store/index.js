@@ -23,7 +23,7 @@ export const store = new Vuex.Store({
   actions: {
     registerWeb3({ commit }) {
       console.log('registerWeb3 Action being executed')
-      getWeb3.then(result => {
+      getWeb3().then(result => {
         console.log('committing result to registerWeb3Instance mutation')
         commit('registerWeb3Instance', result)
       }).catch(e => {
