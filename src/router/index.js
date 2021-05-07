@@ -1,14 +1,14 @@
 import Vue from 'vue';
 import VueRouter from 'vue-router';
-import CasinoDapp from '@/components/casino-dapp.vue';
+import Main from '@/views/Main.vue';
 
 Vue.use(VueRouter);
 
 const routes = [
   {
     path: '/',
-    name: 'casino-dapp',
-    component: CasinoDapp,
+    name: 'main',
+    component: Main,
   },
 ];
 
