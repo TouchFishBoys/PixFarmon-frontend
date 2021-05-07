@@ -1,6 +1,6 @@
 <template>
-  <div class="pixfarm-container">
-    <friend-panel />
+  <div class="pixfarm-app">
+    <FriendPanel />
     <div class="island-container">
       <div class="fields-container">
         <Field
@@ -8,61 +8,55 @@
           :fieldIndex='index'
           :key='index'
           :style="calcCssLocation(index)"
+          :selected="index == selectedIndex"
           @click="fieldClick"
         />
       </div>
     </div>
-    <div class="water" />
   </div>
 </template>
 
 <script>
 import Field from '@/components/field.vue';
 import FriendPanel from './friend-panel.vue';
+
 export default {
-  components: {Field, FriendPanel},
+  name: 'Pixfarm',
+  components: { Field, FriendPanel },
   data() {
-    return {};
+    return {
+      selectedIndex: -1,
+    };
   },
   methods: {
     calcCssLocation(index) {
       const x = Math.floor(index / 6);
       const y = index % 6;
       const modifier = x + y;
-      const leftTable = [
-        0,
-        32,
-        64,
-        96,
-        128,
-        160,
-        192,
-        224,
-        256,
-        288,
-        320,
-        352,
-        384,
-      ];
       const css = {
-        left: `${leftTable[modifier]}px`,
-        top: `calc(50% + ${16 * x - 16 * y}px)`,
+        left: `${32 * (modifier)}px`,
+        top: `calc(50% + ${16 * x - 16 * y - 16}px)`,
       };
       // console.log('x:', x, 'y:', y, css);
       return css;
     },
     fieldClick(param) {
       console.log(param);
+      if (param === this.selectedIndex) {
+        this.selectedIndex = -1;
+      } else {
+        this.selectedIndex = param;
+      }
     },
   },
 };
 </script>
 
 <style scoped>
-.pixfarm-container {
+.pixfarm-app {
   margin: auto;
   width: 896px;
-  height:100vh;
+  height:896px;
 }
 .island-container {
   height: 896px;
@@ -79,5 +73,6 @@ export default {
   width: 896px;
   height: calc(100vh - 896px);
   background-image: url("../assets/water.gif");
+  background-repeat:repeat-y;
 }
 </style>

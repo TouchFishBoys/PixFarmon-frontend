@@ -4,11 +4,15 @@
       class="response-area"
       @click="onFieldClick"
       :style="responseAreaCss"
-    >
-    </div>
+    />
     <div
       class='hover-img'
       :style="hoverImgCss"
+    />
+    <div
+      class="selected-img"
+      :class="{unselected: !selected}"
+      :style="selectedImgCss"
     />
     <div class='field-img' />
   </div>
@@ -16,8 +20,13 @@
 
 <script>
 export default {
+  name: 'Field',
   props: {
     fieldIndex: Number,
+    selected: {
+      type: Boolean,
+      default: false,
+    },
   },
   data() {
     return {
@@ -25,7 +34,10 @@ export default {
         zIndex: 99 - this.fieldIndex,
       },
       hoverImgCss: {
-        zIndex: 97 - this.fieldIndex,
+        zIndex: 79 - this.fieldIndex,
+      },
+      selectedImgCss: {
+        zIndex: 89 - this.fieldIndex,
       },
     };
   },
@@ -39,7 +51,7 @@ export default {
 
 <style scoped>
 .response-area {
-  position:absolute;
+  position: absolute;
   cursor: pointer;
   top: 32px;
   width: 64px;
@@ -48,19 +60,27 @@ export default {
   overflow: hidden;
 }
 .field-container {
-  position:absolute;
-  margin-top: -16px;
+  position: absolute;
   width: 64px;
   height: 64px;
 }
 .field-img {
-  position:absolute;
+  position: absolute;
   width: 64px;
   height: 64px;
   background-image: url("../assets/field-weed.png");
 }
+.selected-img {
+  position: absolute;
+  width: 64px;
+  height: 64px;
+  background-image: url("~@/assets/field-selected.gif");
+}
+.selected-img.unselected {
+  display: none;
+}
 .hover-img {
-  position:absolute;
+  position: absolute;
   display: none;
   height: 64px;
   width: 64px;

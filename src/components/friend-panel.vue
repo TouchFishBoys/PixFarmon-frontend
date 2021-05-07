@@ -1,19 +1,9 @@
 <template>
   <div class="friend-panel-container">
-    <a-list
+    <li
       item-layout='horizontal'
-      :data-source="friendList"
     >
-      <template #renderItem="{item}">
-        <a-list-item>
-          <a-list-item-meta>
-            <template  #title>
-              <a>{{item.displayName}}</a>
-            </template>
-          </a-list-item-meta>
-        </a-list-item>
-      </template>
-    </a-list>
+    </li>
   </div>
 </template>
 
@@ -32,5 +22,8 @@ export default {
 };
 </script>
 
-<style>
+<style scoped>
+.friend-panel-container {
+  position: absolute
+}
 </style>
