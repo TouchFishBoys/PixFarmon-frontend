@@ -4,8 +4,13 @@ module.exports = {
       less: {
         lessOptions: {
           javascriptEnabled: true,
+          strictMath: false,
         },
       },
     },
   },
+
+  transpileDependencies: [
+    'vuetify',
+  ],
 };

@@ -31,7 +31,7 @@ export default {
   },
   methods: {
     onFieldClick() {
-      this.$emit('click', fieldIndex);
+      this.$emit('click', this.fieldIndex);
     },
   },
 };
@@ -39,7 +39,7 @@ export default {
 
 <style scoped>
 .response-area {
-  position: absolute;
+  position:absolute;
   cursor: pointer;
   top: 32px;
   width: 64px;
@@ -48,18 +48,19 @@ export default {
   overflow: hidden;
 }
 .field-container {
-  position: absolute;
+  position:absolute;
   margin-top: -16px;
   width: 64px;
   height: 64px;
 }
 .field-img {
+  position:absolute;
   width: 64px;
   height: 64px;
   background-image: url("../assets/field-weed.png");
 }
 .hover-img {
-  position: absolute;
+  position:absolute;
   display: none;
   height: 64px;
   width: 64px;
