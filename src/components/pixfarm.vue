@@ -17,7 +17,7 @@
 </template>
 
 <script>
-import Field from "@/components/field.vue";
+import Field from "@/components/pixfarm/field.vue";
 import FriendPanel from "./friend-panel.vue";
 
 export default {
@@ -60,7 +60,7 @@ export default {
 }
 .island-container {
   height: 896px;
-  background-image: url("../assets/pixfarm-island.gif");
+  background-image: url("~@/assets/pixfarm-island.gif");
 }
 .fields-container {
   position: relative;
@@ -72,7 +72,7 @@ export default {
 .water {
   width: 896px;
   height: calc(100vh - 896px);
-  background-image: url("../assets/water.gif");
+  background-image: url("~@/assets/water.gif");
   background-repeat: repeat-y;
 }
 </style>

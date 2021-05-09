@@ -3,10 +3,7 @@
     <div class="response-area" @click="onFieldClick" :style="responseAreaCss" />
     <div class="hover-img" />
     <div class="selected-box" :class="{ unselected: !selected }">
-      <div class="tools-box">
-        <div class="round-button-cover" />
-        <div class="tool-button tool-sowing" :class="{ selected: selected }" />
-      </div>
+      <tool-box />
       <div class="selected-img" />
     </div>
     <div class="field-img" />
@@ -14,8 +11,11 @@
 </template>
 
 <script>
+import ToolBox from "./toolbox.vue";
+
 export default {
   name: "Field",
+  components: { ToolBox },
   props: {
     fieldIndex: Number,
     selected: {
@@ -60,7 +60,7 @@ export default {
   top: 0px;
   width: 64px;
   height: 64px;
-  background-image: url("../assets/field-weed.png");
+  background-image: url("~@/assets/field-weed.png");
 }
 .tool-button {
   transform: scale(0);
@@ -108,7 +108,7 @@ export default {
       z-index: 105;
       width: 48px;
       height: 48px;
-      background: url("~@/assets/button-sowing.gif");
+      background: url("~@/assets/btn-sowing.gif");
     }
   }
 }
@@ -118,7 +118,7 @@ export default {
   height: 64px;
   width: 64px;
   z-index: 12;
-  background-image: url("../assets/field-weed-hover.gif");
+  background-image: url("~@/assets/field-weed-hover.gif");
 }
 .response-area:hover + .hover-img {
   display: block;

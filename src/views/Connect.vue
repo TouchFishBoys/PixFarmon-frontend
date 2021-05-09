@@ -13,7 +13,13 @@
               Connect to an account
             </v-stepper-step>
             <v-divider />
-            <v-stepper-step :complete="stepNum > 3" step="3">
+            <v-stepper-step :complete="registered" step="3">
+              Register
+            </v-stepper-step>
+            <v-stepper-step
+              :complete="metamaskInstalled && accountConnected && registered"
+              step="4"
+            >
               Enter the game
             </v-stepper-step>
           </v-stepper-header>
@@ -27,7 +33,9 @@
                 <v-card-actions>
                   <v-spacer />
                   <v-btn v-ripple color="primary" @click="installMetaMask">
-                    {{ metamaskInstalled ? "Next step" : "Install Metamask" }}
+                    {{
+                      metamaskInstalled ? "⭕ Next step" : "Install Metamask"
+                    }}
                   </v-btn>
                 </v-card-actions>
               </v-card>
@@ -40,7 +48,12 @@
                 </v-card-title>
                 <v-card-actions>
                   <v-spacer />
-                  <v-btn v-ripple color="primary" @click="connectAccount">
+                  <v-btn
+                    v-ripple
+                    color="primary"
+                    @click="connectAccount"
+                    :loading="connecting"
+                  >
                     {{ accountConnected ? "Next step" : "Connect" }}
                   </v-btn>
                 </v-card-actions>
@@ -48,6 +61,20 @@
             </v-stepper-content>
 
             <v-stepper-content step="3">
+              <v-card>
+                <v-card-title>
+                  Register
+                </v-card-title>
+                <v-card-actions>
+                  <v-spacer />
+                  <v-btn v-ripple color="primary" @click="register">
+                    {{ registered ? "Next step" : "Register" }}
+                  </v-btn>
+                </v-card-actions>
+              </v-card>
+            </v-stepper-content>
+
+            <v-stepper-content step="4">
               <v-card>
                 <v-card-title>
                   Congratulations!You can enter this game now
@@ -65,6 +92,9 @@
       </v-col>
       <v-spacer />
     </v-row>
+    <v-snackbar v-model="canceled">
+      Canceled
+    </v-snackbar>
   </v-container>
 </template>
 
@@ -74,7 +104,10 @@ export default {
     return {
       stepNum: 1,
       metamaskInstalled: false,
-      accountConnected: false
+      accountConnected: false,
+      connecting: false,
+      registered: false,
+      canceled: false
     };
   },
   methods: {
@@ -85,6 +118,20 @@ export default {
       } else {
         window.open("https://metamask.io/download.html", "_blank");
       }
+    },
+    register() {
+      window.ethereum
+        .request({ method: "eth_requestAccounts" })
+        .then(data => {
+          if (data[0]) {
+            this.$store.commit("account/login", data[0]);
+          } else {
+            console.log(data);
+          }
+        })
+        .catch(error => {
+          console.log("Error when register", error);
+        });
     },
     refreshStatus() {
       if (window.ethereum) {
@@ -102,19 +149,23 @@ export default {
     },
     connectAccount() {
       if (!this.accountConnected) {
+        this.connecting = true;
         window.ethereum
           .request({ method: "eth_requestAccounts" })
           .then(() => {
             this.accountConnected = true;
             this.stepNum += 1;
+            this.connecting = false;
           })
           .catch(error => {
             if (error.code === 4001) {
               // EIP-1193 userRejectedRequest error
               console.log("Please connect to MetaMask.");
+              this.canceled = true;
             } else {
               console.error(error);
             }
+            this.connecting = false;
           });
       } else {
         this.stepNum += 1;
