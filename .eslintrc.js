@@ -15,7 +15,17 @@ module.exports = {
     "no-console": process.env.NODE_ENV === "production" ? "warn" : "off",
     "no-debugger": process.env.NODE_ENV === "production" ? "warn" : "off",
     "no-param-reassign": ["error", { props: false }],
-    "global-require": 0
+    "global-require": 0,
+    "prefer-destructuring": [
+      "error",
+      {
+        array: false,
+        object: true
+      },
+      {
+        enforceForRenamedProperties: false
+      }
+    ]
   },
   settings: {
     "import/resolver": {

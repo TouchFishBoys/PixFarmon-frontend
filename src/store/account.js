@@ -21,6 +21,22 @@ const mutations = {
       console.log("missing contract");
     }
   },
+  register(state, address, username) {
+    if (dapp.pixfarmonContract) {
+      dapp.pixfarmonContract.methods
+        .register(username)
+        .call({
+          from: address
+        })
+        .then(() => {
+          console.log("Register success");
+          state.username = username;
+        })
+        .catch(error => {
+          console.log("Register failed", error);
+        });
+    }
+  },
   logout(state) {
     state.username = "";
     state.address = "";

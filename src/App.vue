@@ -31,9 +31,7 @@ export default {
     //
   }),
   methods: {
-    onMetamaskComplete(web3, metaMaskAddress, message, type, netID) {
-      console.log(web3, metaMaskAddress, message, type, netID);
-    }
+    //
   }
 };
 </script>

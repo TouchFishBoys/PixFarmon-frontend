@@ -65,6 +65,12 @@
                 <v-card-title>
                   Register
                 </v-card-title>
+                <v-form>
+                  <v-text-field label="Your address" v-model="address">
+                  </v-text-field>
+                  <v-text-field label="Username" v-model="username">
+                  </v-text-field>
+                </v-form>
                 <v-card-actions>
                   <v-spacer />
                   <v-btn v-ripple color="primary" @click="register">
@@ -107,7 +113,9 @@ export default {
       accountConnected: false,
       connecting: false,
       registered: false,
-      canceled: false
+      canceled: false,
+      address: "",
+      username: ""
     };
   },
   methods: {
@@ -124,6 +132,7 @@ export default {
         .request({ method: "eth_requestAccounts" })
         .then(data => {
           if (data[0]) {
+            console("this address", data[0]);
             this.$store.commit("account/login", data[0]);
           } else {
             console.log(data);
@@ -152,7 +161,8 @@ export default {
         this.connecting = true;
         window.ethereum
           .request({ method: "eth_requestAccounts" })
-          .then(() => {
+          .then(accounts => {
+            this.address = accounts[0];
             this.accountConnected = true;
             this.stepNum += 1;
             this.connecting = false;
