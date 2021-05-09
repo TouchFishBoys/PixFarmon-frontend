@@ -1,17 +1,15 @@
 <template>
-  <pixfarm/>
+  <pixfarm />
 </template>
 
 <script>
-import pixfarm from '@/components/pixfarm.vue';
+import pixfarm from "@/components/pixfarm.vue";
 
 export default {
   components: {
-    pixfarm,
-  },
+    pixfarm
+  }
 };
 </script>
 
-<style>
-
-</style>
+<style></style>

@@ -6,7 +6,7 @@
         "typescript",
         "typescriptreact",
         "html",
-        "vue"
+        "vue",
     ],
     "editor.codeActionsOnSave": {
         "source.fixAll.eslint": true

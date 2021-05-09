@@ -1,30 +1,27 @@
 module.exports = {
   extends: [
-    'plugin:vue/essential',
-    'airbnb-base',
+    "plugin:vue/essential",
+    "airbnb-base",
+    "plugin:prettier/recommended"
   ],
-  plugins: [
-    'vue',
-    'html',
-  ],
+  plugins: ["vue", "html"],
   root: true,
   parserOptions: {
     ecmaVersion: 12,
-    sourceType: 'module',
-    parser: 'babel-eslint',
+    sourceType: "module",
+    parser: "babel-eslint"
   },
   rules: {
-    'no-console': process.env.NODE_ENV === 'production' ? 'warn' : 'off',
-    'no-debugger': process.env.NODE_ENV === 'production' ? 'warn' : 'off',
+    "no-console": process.env.NODE_ENV === "production" ? "warn" : "off",
+    "no-debugger": process.env.NODE_ENV === "production" ? "warn" : "off",
+    "no-param-reassign": ["error", { props: false }]
   },
   settings: {
-    'import/resolver': {
+    "import/resolver": {
       alias: {
-        map: [
-          ['@', './src'],
-        ],
-        extensions: ['.js', '.json', '.ts', '.vue'],
-      },
-    },
-  },
+        map: [["@", "./src"]],
+        extensions: [".js", ".json", ".ts", ".vue"]
+      }
+    }
+  }
 };

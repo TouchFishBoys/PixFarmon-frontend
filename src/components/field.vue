@@ -1,57 +1,47 @@
 <template>
-  <div class='field-container'>
-    <div
-      class="response-area"
-      @click="onFieldClick"
-      :style="responseAreaCss"
-    />
-    <div
-      class='hover-img'
-      :style="hoverImgCss"
-    />
-    <div
-      class="selected-img"
-      :class="{unselected: !selected}"
-      :style="selectedImgCss"
-    />
-    <div class='field-img' />
+  <div class="field-container">
+    <div class="response-area" @click="onFieldClick" :style="responseAreaCss" />
+    <div class="hover-img" />
+    <div class="selected-box" :class="{ unselected: !selected }">
+      <div class="tools-box">
+        <div class="round-button-cover" />
+        <div class="tool-button tool-sowing" :class="{ selected: selected }" />
+      </div>
+      <div class="selected-img" />
+    </div>
+    <div class="field-img" />
   </div>
 </template>
 
 <script>
 export default {
-  name: 'Field',
+  name: "Field",
   props: {
     fieldIndex: Number,
     selected: {
       type: Boolean,
-      default: false,
-    },
+      default: false
+    }
   },
   data() {
     return {
       responseAreaCss: {
-        zIndex: 99 - this.fieldIndex,
-      },
-      hoverImgCss: {
-        zIndex: 79 - this.fieldIndex,
-      },
-      selectedImgCss: {
-        zIndex: 89 - this.fieldIndex,
-      },
+        zIndex: 99 - this.fieldIndex
+      }
     };
   },
   methods: {
     onFieldClick() {
-      this.$emit('click', this.fieldIndex);
-    },
-  },
+      this.$emit("click", this.fieldIndex);
+    }
+  }
 };
 </script>
 
-<style scoped>
+<style lang="scss" scoped>
 .response-area {
   position: absolute;
+  z-index: 100;
   cursor: pointer;
   top: 32px;
   width: 64px;
@@ -66,27 +56,70 @@ export default {
 }
 .field-img {
   position: absolute;
+  z-index: 10;
+  top: 0px;
   width: 64px;
   height: 64px;
   background-image: url("../assets/field-weed.png");
 }
-.selected-img {
-  position: absolute;
-  width: 64px;
-  height: 64px;
-  background-image: url("~@/assets/field-selected.gif");
+.tool-button {
+  transform: scale(0);
 }
-.selected-img.unselected {
-  display: none;
+.tool-button.selected {
+  transform: scale(1);
+  transition: transform 600ms cubic-bezier(0.175, 0.885, 0.32, 1.275);
+}
+.round-button-cover {
+  position: absolute;
+  z-index: 500;
+  width: 48px;
+  height: 48px;
+  cursor: pointer;
+  border-radius: 50%;
+  overflow: hidden;
+}
+
+.selected-box.unselected {
+  width: 0;
+  overflow: hidden;
+  div {
+    // display:none会导致动画不播放
+    //display: none;
+    width: 0;
+  }
+}
+.selected-box {
+  margin-top: -48px;
+  width: 64px;
+  height: 112px;
+  .selected-img {
+    position: absolute;
+    z-index: 15;
+    width: 64px;
+    height: 64px;
+    bottom: 0px;
+    background-image: url("~@/assets/field-selected.gif");
+  }
+  .tools-box {
+    position: absolute;
+    left: calc((64px - 48px) / 2);
+    z-index: 105;
+    .tool-sowing {
+      z-index: 105;
+      width: 48px;
+      height: 48px;
+      background: url("~@/assets/button-sowing.gif");
+    }
+  }
 }
 .hover-img {
   position: absolute;
   display: none;
   height: 64px;
   width: 64px;
+  z-index: 12;
   background-image: url("../assets/field-weed-hover.gif");
 }
-
 .response-area:hover + .hover-img {
   display: block;
 }
