@@ -1,9 +1,11 @@
 import pixfarmonAbi from './Pixfarmon/build/contracts/Pixfarmon.json';
 import repositoryAbi from './Pixfarmon/build/contracts/RepositoryBase.json';
-import Contract from 'web3-eth-contract';
+import web3Core from '../web3-core';
 
-var pixfarmonContract = new Contract(pixfarmonAbi.abi, "0x490eF64673A7Aaf95eF9b9e08E55A600E5b60887");
-var repositoryContract = new Contract(repositoryAbi.abi, "0xD8a0e207b722Bb379fd7623FB3DD92752919aEB5");
+let web3 = web3Core.getWeb3()
+
+var pixfarmonContract = new web3.eth.Contract(pixfarmonAbi.abi, "0xFb64537b9CCE48421E6798bc0d86AE41809CCD9D");
+var repositoryContract = new web3.eth.Contract(repositoryAbi.abi, "0x3afAc52c29Ea9B7554D01286E3ac2Ee06E9081DF");
 
 export default {
   pixfarmonContract,

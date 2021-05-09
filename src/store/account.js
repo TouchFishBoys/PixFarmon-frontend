@@ -6,13 +6,13 @@ const mutations = {
     if (dapp.repositoryContract) {
       console.log(dapp.repositoryContract);
       dapp.repositoryContract.methods
-        .addressToName(address)
+        .getUsername(address)
         .call({
           from: address
         })
         .then(result => {
           console.log(result);
-          state.account = address;
+          state.address = address;
         })
         .catch(error => {
           console.log(error);
@@ -22,18 +22,16 @@ const mutations = {
     }
   },
   logout(state) {
-    state.account.address = "";
-    state.account.username = "";
+    state.username = "";
+    state.address = "";
   }
 };
 
 export default {
   namespaced: true,
   state: () => ({
-    account: {
-      username: "",
-      address: ""
-    }
+    username: "",
+    address: ""
   }),
   mutations
 };
