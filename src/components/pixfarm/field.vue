@@ -6,11 +6,19 @@
       <tool-box />
       <div class="selected-img" />
     </div>
-    <div class="field-img" />
+    <div
+      class="field-img"
+      :style="{
+        backgroundImage: `url(${
+          fieldData.unlocked ? require('@/assets/field-weed.png') : planted
+        })`
+      }"
+    />
   </div>
 </template>
 
 <script>
+import util from "@/util";
 import ToolBox from "./toolbox.vue";
 
 export default {
@@ -18,6 +26,7 @@ export default {
   components: { ToolBox },
   props: {
     fieldIndex: Number,
+    fieldData: Object,
     selected: {
       type: Boolean,
       default: false
@@ -29,6 +38,33 @@ export default {
         zIndex: 99 - this.fieldIndex
       }
     };
+  },
+  computed: {
+    fieldCss() {
+      const result = {
+        image: `url(${require("@/assets/field-weed.png")})`
+      };
+      if (!this.unlocked) {
+        result.filter = "grayscale(100%)";
+      } else if (this.used) {
+        // TODO
+        const currentTime = Date.now() / 1000;
+        console.log("now", currentTime);
+        const plantedTime = this.fieldData.sowingTime;
+        const maturityTime = this.fieldData.munityTime;
+        const level =
+          ((currentTime - plantedTime) / (maturityTime - plantedTime)) * 100;
+        if (level >= 100) {
+          result.image = `url(${require("@/assets/field-weed.png")})`;
+        } else {
+          // eslint-disable-next-line import/no-dynamic-require
+          result.image = `url(${require(`@/assets/plants/${util.getPlantType(
+            this.fieldData.seedTag
+          )}-${util.getPlantAge(level)}.png`)})`;
+        }
+      }
+      return result;
+    }
   },
   methods: {
     onFieldClick() {

@@ -13,12 +13,14 @@
               Connect to an account
             </v-stepper-step>
             <v-divider />
+            <!--
             <v-stepper-step :complete="registered" step="3">
               Register
             </v-stepper-step>
+            -->
             <v-stepper-step
               :complete="metamaskInstalled && accountConnected && registered"
-              step="4"
+              step="3"
             >
               Enter the game
             </v-stepper-step>
@@ -54,12 +56,13 @@
                     @click="connectAccount"
                     :loading="connecting"
                   >
-                    {{ accountConnected ? "Next step" : "Connect" }}
+                    {{ accountConnected ? "⭕ Next step" : "Connect" }}
                   </v-btn>
                 </v-card-actions>
               </v-card>
             </v-stepper-content>
 
+            <!--
             <v-stepper-content step="3">
               <v-card>
                 <v-card-title>
@@ -74,13 +77,14 @@
                 <v-card-actions>
                   <v-spacer />
                   <v-btn v-ripple color="primary" @click="register">
-                    {{ registered ? "Next step" : "Register" }}
+                    {{ registered ? "⭕ Next step" : "Register" }}
                   </v-btn>
                 </v-card-actions>
               </v-card>
             </v-stepper-content>
+            -->
 
-            <v-stepper-content step="4">
+            <v-stepper-content step="3">
               <v-card>
                 <v-card-title>
                   Congratulations!You can enter this game now
@@ -132,8 +136,8 @@ export default {
         .request({ method: "eth_requestAccounts" })
         .then(data => {
           if (data[0]) {
-            console("this address", data[0]);
-            this.$store.commit("account/login", data[0]);
+            console.log("this address", data[0]);
+            this.$store.dispatch("account/login", data[0]);
           } else {
             console.log(data);
           }
@@ -162,6 +166,7 @@ export default {
         window.ethereum
           .request({ method: "eth_requestAccounts" })
           .then(accounts => {
+            // eslint-disable-next-line prefer-destructuring
             this.address = accounts[0];
             this.accountConnected = true;
             this.stepNum += 1;

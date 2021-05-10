@@ -9,6 +9,7 @@
           :key="index"
           :style="calcCssLocation(index)"
           :selected="index == selectedIndex"
+          :fieldData="fields[Math.floor(index / 6)][index % 6]"
           @click="fieldClick"
         />
       </div>
@@ -18,6 +19,7 @@
 
 <script>
 import Field from "@/components/pixfarm/field.vue";
+import dapp from "@/util/pixfarmon-dapp";
 import FriendPanel from "./friend-panel.vue";
 
 export default {
@@ -25,7 +27,9 @@ export default {
   components: { Field, FriendPanel },
   data() {
     return {
-      selectedIndex: -1
+      selectedIndex: -1,
+      loading: true,
+      fields: []
     };
   },
   methods: {
@@ -47,7 +51,34 @@ export default {
       } else {
         this.selectedIndex = param;
       }
+    },
+    loadFields() {
+      const { address } = this.$store.state.account;
+      console.log(address);
+      dapp.field.getFields(address, { address }, (error, data) => {
+        if (error) {
+          console.log(error);
+        } else {
+          this.updateFields(data);
+        }
+      });
+    },
+    updateFields(fieldsData) {
+      console.log("Fields:", fieldsData);
+      /*
+      for (const row in fieldsData) {
+        for (const col in row) {
+          fields.push({
+            seedTag: col.seedTag,
+            sowingTime: col.sowingTime,
+            unlocked: col.unlocked
+          });
+        }
+      } */
     }
+  },
+  mounted() {
+    this.loadFields();
   }
 };
 </script>
