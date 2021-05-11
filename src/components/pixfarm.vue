@@ -73,6 +73,16 @@ export default {
             this.$gon("sowingTool", fieldIndex => {
               this.$refs.sowing.sowing(fieldIndex);
             });
+            this.$on("harvestTool", fieldIndex => {
+              const { x, y } = this.$i2xy(fieldIndex);
+              dapp.field.harvest(this.address, { x, y }, harvestError => {
+                if (harvestError) {
+                  console.log("Error harvesting", error);
+                } else {
+                  this.loadFields();
+                }
+              });
+            });
             this.updateFields(data);
           }
         }
@@ -80,7 +90,6 @@ export default {
     },
     updateFields(fieldsData) {
       this.fields = fieldsData.flat();
-      console.log("Fields:", this.fields);
     }
   },
   created() {

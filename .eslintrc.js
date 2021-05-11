@@ -16,6 +16,8 @@ module.exports = {
     "no-debugger": process.env.NODE_ENV === "production" ? "warn" : "off",
     "no-param-reassign": ["error", { props: false }],
     "global-require": 0,
+    "guard-for-in": 0,
+    "no-restricted-syntax": 0,
     "prefer-destructuring": [
       "error",
       {

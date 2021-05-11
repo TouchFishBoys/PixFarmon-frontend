@@ -1,11 +1,17 @@
 <template>
-  <div class="friend-panel-container">
-    <li item-layout="horizontal"></li>
-  </div>
+  <v-sheet> </v-sheet>
 </template>
 
 <script>
+import dapp from "@/util/pixfarmon-dapp";
+import { mapState } from "vuex";
+
 export default {
+  computed: {
+    ...mapState("account", {
+      address: state => state.address
+    })
+  },
   data() {
     return {
       friendList: [
@@ -15,6 +21,17 @@ export default {
         }
       ]
     };
+  },
+  methods: {
+    loadFriends() {
+      dapp.friend.getFriendList(this.address, (error, friends) => {
+        if (error) {
+          console.error("ERROR loading friend");
+        } else {
+          console.log(friends);
+        }
+      });
+    }
   }
 };
 </script>

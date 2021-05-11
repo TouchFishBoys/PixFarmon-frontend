@@ -45,9 +45,6 @@ export default {
       return 2;
     },
     fieldImage() {
-      if (this.fieldData) {
-        console.log(`Field data of field:${this.fieldIndex}`, this.fieldData);
-      }
       if (!this.fieldData || !this.fieldData.unlocked) {
         return `${this.publicPath}imgs/field-weed.png`;
       }

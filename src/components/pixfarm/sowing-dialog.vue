@@ -1,40 +1,38 @@
 <template>
-  <v-dialog v-model="dialog">
+  <v-dialog v-model="dialog" persistent max-width="600">
     <!-- 背包 -->
-    <v-card> </v-card>
+    <v-card>
+      <v-card-title>
+        Choose your seed to plant
+      </v-card-title>
+
+      <repository class="mx-4"></repository>
+
+      <v-card-actions>
+        <v-spacer> </v-spacer>
+        <v-btn @click="dialog = false"> close </v-btn>
+      </v-card-actions>
+    </v-card>
   </v-dialog>
 </template>
 
 <script>
-import Dapp from "@/util/pixfarmon-dapp";
 import { mapState } from "vuex";
+import Repository from "../repository.vue";
 
 export default {
+  components: { Repository },
   data() {
     return {
       dialog: false,
-      field: -1
+      field: -1,
+      repository: []
     };
   },
   methods: {
     sowing(fieldIndex) {
       this.field = fieldIndex;
       this.dialog = true;
-      Dapp.repository.getItemList(
-        this.address,
-        {
-          type: 1,
-          user: this.address,
-          target: this.address
-        },
-        (error, items) => {
-          if (error) {
-            console.log(error);
-          } else {
-            console.log("Get items:", items);
-          }
-        }
-      );
     }
   },
   computed: {
