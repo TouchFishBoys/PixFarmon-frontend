@@ -9,7 +9,6 @@
           :key="index"
           :style="calcCssLocation(index)"
           :selected="index == selectedIndex"
-          :fieldData="fields[Math.floor(index / 6)][index % 6]"
           @click="fieldClick"
         />
       </div>
@@ -31,6 +30,11 @@ export default {
       loading: true,
       fields: []
     };
+  },
+  computed: {
+    address() {
+      return this.$store.state.account.address;
+    }
   },
   methods: {
     calcCssLocation(index) {
@@ -77,8 +81,8 @@ export default {
       } */
     }
   },
-  mounted() {
-    this.loadFields();
+  created() {
+    // 判断有无登录
   }
 };
 </script>

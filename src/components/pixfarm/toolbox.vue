@@ -7,7 +7,7 @@
       :class="{ usable: tool.usable }"
     >
       <div class="tool-cover" v-if="tool.usable" />
-      <transition name="scale">
+      <transition name="vt-scale">
         <div
           class="tool-img"
           :style="{ backgroundImage: `url(${tool.icon})` }"
@@ -53,22 +53,38 @@ export default {
 
 <style lang="scss" scoped>
 .tool-box {
+  position: relative;
+  z-index: 110;
   display: flex;
   width: fit-content;
   height: 48px;
 }
 .tool {
+  z-index: 110;
   width: 48px;
   height: 48px;
   margin-left: 2px;
   margin-right: 2px;
 }
 .tool-cover {
+  position: absolute;
   cursor: pointer;
+  z-index: 150;
+  width: 48px;
+  height: 48px;
+  overflow: hidden;
+}
+.tool-img {
+  position: absolute;
+  width: 48px;
+  height: 48px;
+  z-index: 110;
 }
 // 不可用的工具
 .tool:not(.usable) {
   .tool-img {
+    width: 48px;
+    height: 48px;
     filter: grayscale(100%);
   }
 }
@@ -77,5 +93,8 @@ export default {
 <style>
 .vt-scale-enter-active {
   transition: transform 600ms cubic-bezier(0.175, 0.885, 0.32, 1.275);
+}
+.vt-scale-leave-active {
+  transition: transform 600mx cubic-bezier(0.175, 0.885, 0.32, 1.275) reverse;
 }
 </style>

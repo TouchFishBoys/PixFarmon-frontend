@@ -8,6 +8,7 @@
     "lint": "vue-cli-service lint"
   },
   "dependencies": {
+    "@truffle/contract": "^4.3.16",
     "core-js": "^3.6.5",
     "fs": "^0.0.1-security",
     "less": "^4.1.1",

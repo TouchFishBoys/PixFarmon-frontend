@@ -3,22 +3,15 @@
     <div class="response-area" @click="onFieldClick" :style="responseAreaCss" />
     <div class="hover-img" />
     <div class="selected-box" :class="{ unselected: !selected }">
-      <tool-box />
+      <tool-box :selected="selected" />
       <div class="selected-img" />
     </div>
-    <div
-      class="field-img"
-      :style="{
-        backgroundImage: `url(${
-          fieldData.unlocked ? require('@/assets/field-weed.png') : planted
-        })`
-      }"
-    />
+    <div class="field-img" />
   </div>
 </template>
 
 <script>
-import util from "@/util";
+// import util from "@/util";
 import ToolBox from "./toolbox.vue";
 
 export default {
@@ -40,6 +33,7 @@ export default {
     };
   },
   computed: {
+    /*
     fieldCss() {
       const result = {
         image: `url(${require("@/assets/field-weed.png")})`
@@ -64,7 +58,7 @@ export default {
         }
       }
       return result;
-    }
+    } */
   },
   methods: {
     onFieldClick() {

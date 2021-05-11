@@ -3,20 +3,11 @@
     <v-app-bar app dense>
       <v-app-bar-title>Pixfarmon</v-app-bar-title>
       <v-spacer />
-      <v-menu transition="slide-y-transition" offset-y>
-        <template v-slot:activator="{ on, attrs }">
-          <v-btn class="mr-8" icon v-on="on" v-bind="attrs">
-            <v-icon>mdi-account</v-icon>
-          </v-btn>
-        </template>
-        <v-card>
-          A stub panel
-        </v-card>
-      </v-menu>
+      <UserPanel />
     </v-app-bar>
 
     <v-main>
-      <v-container fluid>
+      <v-container class="pa-4" fluid>
         <router-view />
       </v-container>
     </v-main>
@@ -25,7 +16,10 @@
 </template>
 
 <script>
+import UserPanel from "./components/user-panel.vue";
+
 export default {
+  components: { UserPanel },
   name: "App",
   data: () => ({
     //

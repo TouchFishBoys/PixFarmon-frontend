@@ -7,6 +7,8 @@ import util from "./util";
 
 Vue.use(util.web3Core);
 
+console.log(process.env.VUE_APP_SKALE_CHAIN);
+
 /* eslint-disable no-new */
 new Vue({
   el: "#app",
