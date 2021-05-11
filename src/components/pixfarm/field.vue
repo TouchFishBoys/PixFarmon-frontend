@@ -6,7 +6,7 @@
       <tool-box :selected="selected" />
       <div class="selected-img" />
     </div>
-    <div class="field-img" />
+    <img class="field-img" :src="fieldImage" />
   </div>
 </template>
 
@@ -20,7 +20,7 @@ export default {
   components: { ToolBox },
   props: {
     fieldIndex: Number,
-    fieldData: Object,
+    fieldData: Array,
     selected: {
       type: Boolean,
       default: false
@@ -28,38 +28,29 @@ export default {
   },
   data() {
     return {
+      publicPath: process.env.BASE_URL,
       responseAreaCss: {
         zIndex: 99 - this.fieldIndex
       }
     };
   },
   computed: {
-    /*
-    fieldCss() {
-      const result = {
-        image: `url(${require("@/assets/field-weed.png")})`
-      };
-      if (!this.unlocked) {
-        result.filter = "grayscale(100%)";
-      } else if (this.used) {
-        // TODO
-        const currentTime = Date.now() / 1000;
-        console.log("now", currentTime);
-        const plantedTime = this.fieldData.sowingTime;
-        const maturityTime = this.fieldData.munityTime;
-        const level =
-          ((currentTime - plantedTime) / (maturityTime - plantedTime)) * 100;
-        if (level >= 100) {
-          result.image = `url(${require("@/assets/field-weed.png")})`;
-        } else {
-          // eslint-disable-next-line import/no-dynamic-require
-          result.image = `url(${require(`@/assets/plants/${util.getPlantType(
-            this.fieldData.seedTag
-          )}-${util.getPlantAge(level)}.png`)})`;
-        }
+    fieldImage() {
+      if (this.fieldData) {
+        console.log(`Field data of field:${this.fieldIndex}`, this.fieldData);
       }
-      return result;
-    } */
+      if (!this.fieldData || !this.fieldData.unlocked) {
+        return `${this.publicPath}imgs/field-weed.png`;
+      }
+      if (!this.fieldData.used) {
+        return `${this.publicPath}imgs/field-empty.png`;
+      }
+      return this.getPlantImage(
+        this.fieldData.seedTag,
+        this.fieldData.sowingTime,
+        this.fieldData.maturityTime
+      );
+    },
     ...mapState("account", {
       address: state => state.address
     })
@@ -67,6 +58,9 @@ export default {
   methods: {
     onFieldClick() {
       this.$emit("click", this.fieldIndex);
+    },
+    getPlantImage() {
+      return "";
     }
   },
   mounted() {
@@ -107,7 +101,6 @@ export default {
   top: 0px;
   width: 64px;
   height: 64px;
-  background-image: url("~@/assets/field-weed.png");
 }
 .tool-button {
   transform: scale(0);

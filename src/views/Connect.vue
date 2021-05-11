@@ -160,6 +160,7 @@ export default {
       }
       this.connecting = true;
       this.connect().then(() => {
+        console.log("Connecting");
         this.connecting = false;
         this.metamaskInstalled = true;
         this.accountConnected = true;
@@ -167,7 +168,8 @@ export default {
           if (error) {
             console.log("May not registered", error);
           } else {
-            this.$store.commit("account/username", username);
+            this.formRegister.username = username;
+            this.$store.commit("account/login", this.address, username);
           }
         });
         this.stepNum = 3;

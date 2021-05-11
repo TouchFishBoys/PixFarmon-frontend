@@ -5,6 +5,7 @@
       <div class="fields-container">
         <Field
           v-for="index in Array.from(Array(36).keys())"
+          :fieldData="fields[index]"
           :fieldIndex="index"
           :key="index"
           :style="calcCssLocation(index)"
@@ -71,17 +72,8 @@ export default {
       );
     },
     updateFields(fieldsData) {
-      console.log("Fields:", fieldsData);
-      /*
-      for (const row in fieldsData) {
-        for (const col in row) {
-          fields.push({
-            seedTag: col.seedTag,
-            sowingTime: col.sowingTime,
-            unlocked: col.unlocked
-          });
-        }
-      } */
+      this.fields = fieldsData.flat();
+      console.log("Fields:", this.fields);
     }
   },
   created() {
