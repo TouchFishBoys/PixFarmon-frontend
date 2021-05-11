@@ -21,8 +21,24 @@ const getPlantAge = level => {
   return -1;
 };
 
+const getTimeInJS = timeInEth => {
+  return timeInEth * 1000;
+};
+
+const getTimeInEth = timeInJS => {
+  return Math.floor(timeInJS / 1000);
+};
+
 export default {
   web3Core,
   getPlantType,
-  getPlantAge
+  getPlantAge,
+  getTimeInEth,
+  getTimeInJS,
+  CURRENT_TIME_ETH: () => {
+    return Math.floor(Date.now() / 1000);
+  },
+  getItemSpecie: tag => {
+    console.log(tag);
+  }
 };

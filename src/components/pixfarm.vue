@@ -90,6 +90,7 @@ export default {
     },
     updateFields(fieldsData) {
       this.fields = fieldsData.flat();
+      console.log(this.fields);
     }
   },
   created() {

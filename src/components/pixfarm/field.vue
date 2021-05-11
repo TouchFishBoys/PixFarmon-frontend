@@ -65,7 +65,8 @@ export default {
     onFieldClick() {
       this.$emit("click", this.fieldIndex);
     },
-    getPlantImage() {
+    getPlantImage(seedTag, sowingTime, maturityTime) {
+      console.log(seedTag, sowingTime, maturityTime);
       return "";
     }
   },

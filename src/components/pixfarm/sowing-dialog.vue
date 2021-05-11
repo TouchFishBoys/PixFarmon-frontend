@@ -6,7 +6,7 @@
         Choose your seed to plant
       </v-card-title>
 
-      <repository class="mx-4"></repository>
+      <repository class="mx-4" @selected="doSowing"></repository>
 
       <v-card-actions>
         <v-spacer> </v-spacer>
@@ -17,6 +17,7 @@
 </template>
 
 <script>
+import Dapp from "@/util/pixfarmon-dapp";
 import { mapState } from "vuex";
 import Repository from "../repository.vue";
 
@@ -33,6 +34,17 @@ export default {
     sowing(fieldIndex) {
       this.field = fieldIndex;
       this.dialog = true;
+    },
+    doSowing(item) {
+      const { x, y } = this.$i2xy(this.field);
+      const { itemTag } = item;
+      Dapp.field.sowing(this.address, { x, y, itemTag }, error => {
+        if (error) {
+          console.log(error);
+        } else {
+          console.log("SUccess");
+        }
+      });
     }
   },
   computed: {

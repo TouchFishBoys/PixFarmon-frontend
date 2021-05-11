@@ -1,15 +1,8 @@
 <template>
   <v-sheet height="200" :loading="loading" :disabled="loading">
-    <v-row>
-      <v-spacer></v-spacer>
-      <v-btn icon fab dark small color="primary" @click="loadItems">
-        <v-icon dark>
-          mdi-refresh
-        </v-icon>
-      </v-btn>
-    </v-row>
-
+    <v-progress-linear indeterminate :active="loading" />
     <v-row
+      :disabled="loading"
       v-for="(itemCol, rowIndex) in repository"
       :key="`item-row-${rowIndex}`"
     >
@@ -17,21 +10,40 @@
         v-for="(item, colIndex) in itemCol"
         :key="`item-${rowIndex}-${colIndex}`"
       >
-        <img @click="itemSelected(rowIndex, colIndex)" />
+        <img
+          @click="itemSelected(rowIndex, colIndex)"
+          :src="getItemImg(rowIndex, colIndex)"
+        />
       </v-col>
     </v-row>
+    <v-divider></v-divider>
+    <v-sheet>
+      <v-spacer></v-spacer>
+      <v-btn icon fab dark small color="primary" @click="loadItems">
+        <v-icon dark>
+          mdi-refresh
+        </v-icon>
+      </v-btn>
+    </v-sheet>
   </v-sheet>
 </template>
 
 <script>
 import Dapp from "@/util/pixfarmon-dapp";
 import { mapState } from "vuex";
+import util from "@/util";
+
+const itemTypeMapping = ["item-seeds"];
 
 export default {
   props: {
     colCount: {
       type: Number,
       default: 5
+    },
+    itemType: {
+      type: Number,
+      default: 0
     }
   },
   data() {
@@ -46,18 +58,21 @@ export default {
     })
   },
   methods: {
-    itemSelected(rowIndex, colIndex, itemTag) {
-      this.$emit("selected", rowIndex, colIndex, itemTag);
+    itemSelected(rowIndex, colIndex) {
+      const itemTag = this.repository[rowIndex * this.colCount + colIndex]; // TODO tag
+      this.$emit("selected", { itemTag, rowIndex, colIndex });
     },
     loadItems() {
+      this.loading = true;
       Dapp.repository.getItemList(
         this.address,
         {
-          type: 1,
+          type: this.itemType,
           user: this.address,
           target: this.address
         },
         (error, items) => {
+          this.loading = false;
           if (error) {
             console.log(error);
           } else {
@@ -66,6 +81,13 @@ export default {
           }
         }
       );
+    },
+    getItemImg(rowIndex, colIndex) {
+      const item = this.repository[rowIndex * this.colCount + colIndex];
+      console.log("Item is", item);
+      const { itemType, tag } = item;
+      const specie = util.getItemSpecie(tag);
+      return `${process.env.BASE_URL}imgs/${itemTypeMapping[itemType]}/s${specie}`; // TODO item type
     }
   }
 };
