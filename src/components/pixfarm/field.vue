@@ -11,7 +11,8 @@
 </template>
 
 <script>
-// import util from "@/util";
+import Dapp from "@/util/pixfarmon-dapp";
+import { mapState } from "vuex";
 import ToolBox from "./toolbox.vue";
 
 export default {
@@ -59,11 +60,27 @@ export default {
       }
       return result;
     } */
+    ...mapState("account", {
+      address: state => state.address
+    })
   },
   methods: {
     onFieldClick() {
       this.$emit("click", this.fieldIndex);
     }
+  },
+  mounted() {
+    Dapp.field.getFields(
+      this.address,
+      { address: this.address },
+      (error, fields) => {
+        if (error) {
+          console.log("Get fields failed");
+        } else {
+          this.fields = fields;
+        }
+      }
+    );
   }
 };
 </script>

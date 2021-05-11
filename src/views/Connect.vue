@@ -61,13 +61,16 @@
             <v-card>
               <v-form>
                 <v-text-field label="Your address" v-model="address" disabled />
-                <v-text-field label="Username" v-model="username" />
+                <v-text-field
+                  label="Username"
+                  v-model="formRegister.username"
+                />
               </v-form>
 
               <v-card-actions>
                 <v-spacer />
-                <v-btn v-ripple color="primary" @click="register">
-                  {{ registered ? "⭕ Next step" : "Register" }}
+                <v-btn v-ripple color="primary" @click="registerAccount">
+                  {{ isLogged ? "⭕ Next step" : "Register" }}
                 </v-btn>
               </v-card-actions>
             </v-card>
@@ -97,11 +100,14 @@
 
 <script>
 import Dapp from "@/util/pixfarmon-dapp";
-import { mapState, mapActions } from "vuex";
+import { mapState, mapActions, mapGetters } from "vuex";
 
 export default {
   data() {
     return {
+      formRegister: {
+        username: ""
+      },
       stepNum: 1,
       metamaskInstalled: false,
       accountConnected: false,
@@ -115,7 +121,8 @@ export default {
     ...mapState("account", {
       address: state => state.address,
       username: state => state.username
-    })
+    }),
+    ...mapGetters("account", ["isLogged"])
   },
   methods: {
     installMetaMask() {
@@ -126,7 +133,13 @@ export default {
         window.open("https://metamask.io/download.html", "_blank");
       }
     },
-    register() {},
+    registerAccount() {
+      if (this.isLogged) {
+        this.stepNum = 4;
+      } else {
+        this.register(this.formRegister.username).then(() => {});
+      }
+    },
     refreshStatus() {
       if (window.ethereum) {
         this.metamaskInstalled = true;
@@ -150,7 +163,7 @@ export default {
         this.connecting = false;
         this.metamaskInstalled = true;
         this.accountConnected = true;
-        Dapp.account.login(this.account, (error, username) => {
+        Dapp.account.login(this.address, (error, username) => {
           if (error) {
             console.log("May not registered", error);
           } else {
@@ -165,7 +178,7 @@ export default {
         name: "main"
       });
     },
-    ...mapActions("account", ["connect", "login"])
+    ...mapActions("account", ["connect", "login", "register"])
   },
   created() {
     this.connectAccount();

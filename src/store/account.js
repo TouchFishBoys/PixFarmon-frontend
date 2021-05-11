@@ -41,21 +41,26 @@ const actions = {
     });
   },
   // Register account, if success, login
-  register({ commit }, address, username) {
-    dapp.account.register(address, { username }, error => {
-      if (error) {
-        console.log("Error when register", error);
-      } else {
-        console.log("Register success");
-        commit("login", address, username);
-      }
+  register({ commit, state }, username) {
+    const { address } = state;
+    return new Promise((resolve, reject) => {
+      dapp.account.register(address, { username }, error => {
+        if (error) {
+          console.log("Error when register", error);
+          reject(error);
+        } else {
+          console.log("Register success");
+          commit("login", address, username);
+          resolve();
+        }
+      });
     });
   }
 };
 
 const getters = {
   isLogged: state => {
-    return state.username !== null;
+    return state.username !== "";
   }
 };
 

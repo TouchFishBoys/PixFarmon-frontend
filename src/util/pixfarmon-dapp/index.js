@@ -1,37 +1,37 @@
-import contract from "@truffle/contract";
 import PixfarmonJSON from "./Pixfarmon/build/contracts/Pixfarmon.json";
 import RepositoryJSON from "./Pixfarmon/build/contracts/RepositoryBase.json";
 import PixfarmJSON from "./Pixfarmon/build/contracts/PixFarm.json";
 import FarmMarketJSON from "./Pixfarmon/build/contracts/FarmMarket.json";
 
-const Pixfarm = contract({
-  abi: PixfarmJSON.abi,
-  address: "0x7373426fD988EC64623A3849E8750C4be76Ef22f"
-});
-const Pixfarmon = contract({
-  abi: PixfarmonJSON.abi,
-  address: "0x89ABb27f6103024A558027C30c7FD481BC927e54"
-});
-const Repository = contract({
-  abi: RepositoryJSON.abi,
-  address: "0x3534F5F2d1AFaaf8F91937f35ceBA5eC4ab58897"
-});
-const FarmMarket = contract({
-  abi: FarmMarketJSON.abi,
-  address: "0x160Da551ecFfBb33675C5873093d93709E7F360C"
-});
+let Pixfarm = null;
+let Pixfarmon = null;
+let Repository = null;
+let FarmMarket = null;
 
-const setProvider = provider => {
-  Pixfarm.setProvider(provider);
-  Pixfarmon.setProvider(provider);
-  Repository.setProvider(provider);
-  FarmMarket.setProvider(provider);
+const updateWeb3 = web3 => {
+  Pixfarm = new web3.eth.Contract(
+    PixfarmJSON.abi,
+    "0x487DDac6910EDb2F06B61924Daf42e41f4D6868E"
+  );
+  Pixfarmon = new web3.eth.Contract(
+    PixfarmonJSON.abi,
+    "0xf11A6a034BD7e2e2c7Cca0109D4B8F9E7F4D202d"
+  );
+  Repository = new web3.eth.Contract(
+    RepositoryJSON.abi,
+    "0xAEFB6032d9731423cc1714dEB84D02B9676Ab521"
+  );
+  FarmMarket = new web3.eth.Contract(
+    FarmMarketJSON.abi,
+    "0x44399Afd5069a175fdb28C467544CfDBEcB5CaFb"
+  );
 };
 
 const getFields = async (sender, { address }, callback) => {
   try {
-    const instance = await Pixfarm.deployed();
-    const fields = await instance.getFields(address, { from: sender });
+    const fields = await Pixfarm.methods
+      .getFields(address)
+      .call({ from: sender });
     callback(null, fields);
   } catch (error) {
     callback(error, null);
@@ -40,10 +40,9 @@ const getFields = async (sender, { address }, callback) => {
 
 const getItemList = async (sender, { type, user, target }, callback) => {
   try {
-    const instance = await Repository.deployed();
-    const items = await instance.getItemList(type, user, target, {
-      from: sender
-    });
+    const items = await Repository.methods
+      .getItemList(type, user, target)
+      .call({ from: sender });
     callback(null, items);
   } catch (error) {
     callback(error, null);
@@ -52,8 +51,9 @@ const getItemList = async (sender, { type, user, target }, callback) => {
 
 const getFriendList = async (sender, callback) => {
   try {
-    const instance = await Repository.deployed();
-    const friends = await instance.getFriendList({ from: sender });
+    const friends = await Repository.methods
+      .getFriendList()
+      .call({ from: sender });
     callback(null, friends);
   } catch (error) {
     callback(error, null);
@@ -62,9 +62,7 @@ const getFriendList = async (sender, callback) => {
 
 const acceptFriend = async (sender, { index }, callback) => {
   try {
-    const instance = await Repository.deployed();
-    await instance.acceptFriend(index, { from: sender });
-    callback();
+    await Repository.methods.acceptFriend(index).call({ from: sender });
   } catch (error) {
     callback(error);
   }
@@ -72,8 +70,7 @@ const acceptFriend = async (sender, { index }, callback) => {
 
 const refuseFriend = async (sender, { index }, callback) => {
   try {
-    const instance = await Repository.deployed();
-    await instance.refuseFriend(index, { from: sender });
+    await Repository.methods.refuseFriend(index).call({ from: sender });
   } catch (error) {
     callback(error);
   }
@@ -81,15 +78,14 @@ const refuseFriend = async (sender, { index }, callback) => {
 
 const addFriend = async (sender, { username, address }, callback) => {
   try {
-    const instance = await Pixfarmon.deployed();
     if (username) {
-      await instance.AddFriendByName(username, { from: sender });
+      await Pixfarmon.methods.AddFriendByName(username).send({ from: sender });
     } else if (address) {
-      await instance.AddFriendByAddress(address, {
+      await Pixfarmon.methods.AddFriendByAddress(address).call({
         from: sender
       });
     } else {
-      callback(new Error("Send request failed"));
+      callback(new Error("No given"));
     }
     callback();
   } catch (error) {
@@ -99,8 +95,9 @@ const addFriend = async (sender, { username, address }, callback) => {
 
 const recharge = async (sender, { amount }, callback) => {
   try {
-    const instance = await Pixfarmon.deployed();
-    await instance.RechargeMoney(amount, { from: sender, value: amount });
+    await Pixfarmon.methods
+      .RechargeMoney(amount)
+      .send({ from: sender, value: amount });
     callback();
   } catch (error) {
     callback(error);
@@ -109,12 +106,12 @@ const recharge = async (sender, { amount }, callback) => {
 
 const buySeed = async (sender, { specie, level, amount }, callback) => {
   try {
-    const instance = await FarmMarket.deployed();
-    const price = await instance.getSeedValue(specie, level, { from: sender });
-    await instance.BuySeedFromShop(specie, level, amount, {
-      from: sender,
-      value: price
-    });
+    const price = await FarmMarket.methods
+      .getSeedValue(specie, level)
+      .call({ from: sender });
+    await Pixfarmon.methods
+      .BuySeedFromShop(specie, level, amount)
+      .send({ from: sender, value: price });
     callback();
   } catch (error) {
     callback(error);
@@ -123,8 +120,9 @@ const buySeed = async (sender, { specie, level, amount }, callback) => {
 
 const sowing = async (sender, { x, y, seedTag }, callback) => {
   try {
-    const instance = await Pixfarm.deployed();
-    const success = await instance.sowing(x, y, seedTag, { from: sender });
+    const success = await Pixfarm.methods
+      .sowing(x, y, seedTag)
+      .send({ from: sender });
     if (success) {
       callback();
     } else {
@@ -137,8 +135,7 @@ const sowing = async (sender, { x, y, seedTag }, callback) => {
 
 const harvest = async (sender, { x, y }, callback) => {
   try {
-    const instance = await Pixfarm.deployed();
-    await instance.harvest(x, y, { from: sender });
+    await Pixfarm.methods.harvest(x, y).send({ from: sender });
     callback();
   } catch (error) {
     callback(error);
@@ -147,8 +144,9 @@ const harvest = async (sender, { x, y }, callback) => {
 
 const steal = async (sender, { player, x, y }, callback) => {
   try {
-    const instance = await Pixfarm.deployed();
-    const success = await instance.stealPlant(player, x, y, { from: sender });
+    const success = await Pixfarm.methods
+      .stealPlant(player, x, y)
+      .send({ from: sender });
     callback(null, success);
   } catch (error) {
     callback(error, null);
@@ -157,8 +155,7 @@ const steal = async (sender, { player, x, y }, callback) => {
 
 const eradicate = async (sender, { x, y }, callback) => {
   try {
-    const instance = await Pixfarm.deployed();
-    await instance.eradicate(x, y, { from: sender });
+    await Pixfarm.methods.eradicate(x, y).send({ from: sender });
     callback();
   } catch (error) {
     callback(error, null);
@@ -167,8 +164,9 @@ const eradicate = async (sender, { x, y }, callback) => {
 
 const disassemble = async (sender, { fruitTag }, callback) => {
   try {
-    const instance = await Pixfarm.deployed();
-    const success = await instance.disassembling(fruitTag, { from: sender });
+    const success = Pixfarm.methods
+      .disassembling(fruitTag)
+      .send({ from: sender });
     if (success) {
       callback();
     } else {
@@ -181,8 +179,9 @@ const disassemble = async (sender, { fruitTag }, callback) => {
 
 const register = async (sender, { username }, callback) => {
   try {
-    const instance = await Pixfarmon.deployed();
-    const success = await instance.register(username, { from: sender });
+    const success = await Pixfarmon.methods
+      .register(username)
+      .send({ from: sender });
     if (success) {
       callback();
     } else {
@@ -195,12 +194,14 @@ const register = async (sender, { username }, callback) => {
 
 const login = async (sender, callback) => {
   try {
-    const instance = await Repository.deployed();
-    const username = await instance.getUsername(sender, { from: sender });
+    console.log(sender);
+    const username = await Pixfarmon.methods
+      .getUsername(sender)
+      .call({ from: sender });
     if (username) {
       callback(null, username);
     } else {
-      callback(new Error("Returned invalid username"));
+      callback(new Error(404));
     }
   } catch (error) {
     callback(error);
@@ -208,9 +209,7 @@ const login = async (sender, callback) => {
 };
 
 export default {
-  setProvider,
-  pixfarmonContract: Pixfarmon,
-  repositoryContract: Repository,
+  updateWeb3,
   friend: {
     getFriendList,
     acceptFriend,

@@ -19,6 +19,7 @@
 <script>
 import Field from "@/components/pixfarm/field.vue";
 import dapp from "@/util/pixfarmon-dapp";
+import { mapState } from "vuex";
 import FriendPanel from "./friend-panel.vue";
 
 export default {
@@ -32,9 +33,9 @@ export default {
     };
   },
   computed: {
-    address() {
-      return this.$store.state.account.address;
-    }
+    ...mapState("account", {
+      address: state => state.address
+    })
   },
   methods: {
     calcCssLocation(index) {
@@ -57,15 +58,17 @@ export default {
       }
     },
     loadFields() {
-      const { address } = this.$store.state.account;
-      console.log(address);
-      dapp.field.getFields(address, { address }, (error, data) => {
-        if (error) {
-          console.log(error);
-        } else {
-          this.updateFields(data);
+      dapp.field.getFields(
+        this.address,
+        { address: this.address },
+        (error, data) => {
+          if (error) {
+            console.log(error);
+          } else {
+            this.updateFields(data);
+          }
         }
-      });
+      );
     },
     updateFields(fieldsData) {
       console.log("Fields:", fieldsData);
@@ -82,7 +85,7 @@ export default {
     }
   },
   created() {
-    // 判断有无登录
+    this.loadFields();
   }
 };
 </script>
