@@ -38,17 +38,17 @@ const router = new VueRouter({
   routes
 });
 
-router.beforeEach((to, from, next) => {
-  if (to.name !== "connect" && to.name !== "404") {
-    console.log("Connected:", window.ethereum.isConnected());
-    if (!window.ethereum || !window.ethereum.isConnected()) {
-      next({ name: "connect" });
-    }
-  }
-  if (to.meta.title) {
-    document.title = to.meta.title;
-  }
-  next();
-});
+// router.beforeEach((to, from, next) => {
+//   if (to.name !== "connect" && to.name !== "404") {
+//     console.log("Connected:", window.ethereum.isConnected());
+//     if (!window.ethereum || !window.ethereum.isConnected()) {
+//       next({ name: "connect" });
+//     }
+//   }
+//   if (to.meta.title) {
+//     document.title = to.meta.title;
+//   }
+//   next();
+// });
 
 export default router;

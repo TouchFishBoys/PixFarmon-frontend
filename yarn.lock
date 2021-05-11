@@ -10186,6 +10186,11 @@ typedarray@^0.0.6:
   resolved "https://registry.yarnpkg.com/typedarray/-/typedarray-0.0.6.tgz#867ac74e3864187b1d3d47d996a78ec5c8830777"
   integrity sha1-hnrHTjhkGHsdPUfZlqeOxciDB3c=
 
+typescript@^3.0.0-dev.20180712:
+  version "3.9.9"
+  resolved "https://registry.yarnpkg.com/typescript/-/typescript-3.9.9.tgz#e69905c54bc0681d0518bd4d587cc6f2d0b1a674"
+  integrity sha512-kdMjTiekY+z/ubJCATUPlRDl39vXYiMV9iyeMuEuXZh2we6zz80uovNN2WlAxmmdE/Z/YQe+EbOEXB5RHEED3w==
+
 uglify-js@3.4.x:
   version "3.4.10"
   resolved "https://registry.yarnpkg.com/uglify-js/-/uglify-js-3.4.10.tgz#9ad9563d8eb3acdfb8d38597d2af1d815f6a755f"
@@ -10523,6 +10528,13 @@ vue-eslint-parser@^7.6.0:
     espree "^6.2.1"
     esquery "^1.4.0"
     lodash "^4.17.15"
+
+vue-geventbus@^1.0.2:
+  version "1.0.2"
+  resolved "https://registry.yarnpkg.com/vue-geventbus/-/vue-geventbus-1.0.2.tgz#e2fbbeee8f4ea1865ed828da9f3c2b34ca8806e3"
+  integrity sha512-DAPmnYu47+30Bf3XBmgRPJKQL6Gc93zsnHgaLgkNvgPnVnYa/EzXBk73RMnm0nn+N4E4kaIG+w98eFhDFAZ1tg==
+  dependencies:
+    typescript "^3.0.0-dev.20180712"
 
 vue-hot-reload-api@^2.3.0:
   version "2.3.4"

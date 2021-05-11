@@ -1,6 +1,7 @@
 <template>
   <div class="pixfarm-app">
     <FriendPanel />
+    <SowingDialog ref="sowing" />
     <div class="island-container">
       <div class="fields-container">
         <Field
@@ -22,10 +23,11 @@ import Field from "@/components/pixfarm/field.vue";
 import dapp from "@/util/pixfarmon-dapp";
 import { mapState } from "vuex";
 import FriendPanel from "./friend-panel.vue";
+import SowingDialog from "./pixfarm/sowing-dialog.vue";
 
 export default {
   name: "Pixfarm",
-  components: { Field, FriendPanel },
+  components: { Field, FriendPanel, SowingDialog },
   data() {
     return {
       selectedIndex: -1,
@@ -61,11 +63,16 @@ export default {
     loadFields() {
       dapp.field.getFields(
         this.address,
-        { address: this.address },
+        {
+          address: this.address
+        },
         (error, data) => {
           if (error) {
             console.log(error);
           } else {
+            this.$gon("sowingTool", fieldIndex => {
+              this.$refs.sowing.sowing(fieldIndex);
+            });
             this.updateFields(data);
           }
         }

@@ -6,7 +6,11 @@
       :key="tool.key"
       :class="{ usable: tool.usable }"
     >
-      <div class="tool-cover" v-if="tool.usable" />
+      <div
+        class="tool-cover"
+        v-if="tool.usable"
+        @click="toolClicked(tool.key)"
+      />
       <transition name="vt-scale">
         <div
           class="tool-img"
@@ -23,13 +27,18 @@ export default {
   props: {
     fieldType: {
       type: Number,
-      // 0:Empty 1:seed 2:growing 3:maturation
+      // 0:Locked 1:Empty 2:growing 3:maturation
       default: 0
     }
   },
   data() {
     return {
-      tools: [
+      //
+    };
+  },
+  computed: {
+    tools() {
+      return [
         {
           key: "harvest",
           icon: require("@/assets/btn-harvest.gif"),
@@ -38,15 +47,20 @@ export default {
         {
           key: "sowing",
           icon: require("@/assets/btn-sowing.gif"),
-          usable: this.fieldType === 0
+          usable: this.fieldType === 1
         },
         {
           key: "eradicate",
           icon: require("@/assets/btn-eradicate.gif"),
-          usable: true
+          usable: this.fieldType >= 2
         }
-      ]
-    };
+      ];
+    }
+  },
+  methods: {
+    toolClicked(toolName) {
+      this.$gemit(`${toolName}Tool`);
+    }
   }
 };
 </script>

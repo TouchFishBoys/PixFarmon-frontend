@@ -3,7 +3,7 @@
     <div class="response-area" @click="onFieldClick" :style="responseAreaCss" />
     <div class="hover-img" />
     <div class="selected-box" :class="{ unselected: !selected }">
-      <tool-box :selected="selected" />
+      <tool-box :selected="selected" :fieldType="fieldType" />
       <div class="selected-img" />
     </div>
     <img class="field-img" :src="fieldImage" />
@@ -35,6 +35,15 @@ export default {
     };
   },
   computed: {
+    fieldType() {
+      if (!this.fieldData || !this.fieldData.unlocked) {
+        return 0;
+      }
+      if (!this.fieldData.used) {
+        return 1;
+      }
+      return 2;
+    },
     fieldImage() {
       if (this.fieldData) {
         console.log(`Field data of field:${this.fieldIndex}`, this.fieldData);
