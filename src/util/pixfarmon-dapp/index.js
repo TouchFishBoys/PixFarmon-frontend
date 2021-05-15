@@ -8,10 +8,12 @@ const updateWeb3 = web3 => {
   Pixfarm = new web3.eth.Contract(
     PixfarmJSON.abi,
     "0xc26974d08BBA131F3bb9e9563C39EbAe2DbA73c0"
+    // "0x98f92B68FF85b1A48fC8AA204432DA3ca94d4a2F"
   );
   FarmMarket = new web3.eth.Contract(
     FarmMarketJSON.abi,
     "0x7414Ce4075E35b907f285588898DC315Ee383e3A"
+    // "0x40a7E38f7e15D311d33D6BEa09B9Da92988568da"
   );
 };
 

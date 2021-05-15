@@ -64,23 +64,26 @@ export default {
     },
     loadItems() {
       this.loading = true;
-      Dapp.repository.getItemList(
-        this.address,
-        {
-          type: this.itemType,
-          user: this.address,
-          target: this.address
-        },
-        (error, items) => {
-          this.loading = false;
-          if (error) {
-            console.log(error);
-          } else {
-            console.log("Get items:", items);
-            this.repository = this.$group(items);
+      setTimeout(() => {
+        Dapp.repository.getItemList(
+          this.address,
+          {
+            type: this.itemType,
+            user: this.address,
+            target: this.address
+          },
+          (error, items) => {
+            this.loading = false;
+
+            if (error) {
+              console.log(error);
+            } else {
+              console.log("Get items:", items);
+              this.repository = this.$group(items);
+            }
           }
-        }
-      );
+        );
+      }, 1000);
     },
     getItemImg(rowIndex, colIndex) {
       const item = this.repository[rowIndex * this.colCount + colIndex];
