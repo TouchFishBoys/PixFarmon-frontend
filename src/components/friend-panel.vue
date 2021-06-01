@@ -26,9 +26,9 @@ export default {
     loadFriends() {
       dapp.friend.getFriendList(this.address, (error, friends) => {
         if (error) {
-          console.error("ERROR loading friend");
+          this.$error("ERROR loading friend");
         } else {
-          console.log(friends);
+          this.$log(friends);
         }
       });
     }

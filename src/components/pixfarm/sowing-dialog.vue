@@ -1,16 +1,16 @@
 <template>
-  <v-dialog v-model="dialog" persistent max-width="600">
+  <v-dialog v-model="dialog" persistent width="430">
     <!-- 背包 -->
     <v-card>
       <v-card-title>
         Choose your seed to plant
       </v-card-title>
 
-      <repository class="mx-4" @selected="doSowing"></repository>
+      <Repository class="mx-4" @selected="doSowing"></Repository>
 
       <v-card-actions>
         <v-spacer> </v-spacer>
-        <v-btn @click="dialog = false"> close </v-btn>
+        <v-btn color="primary" @click="dialog = false"> close </v-btn>
       </v-card-actions>
     </v-card>
   </v-dialog>
@@ -19,6 +19,7 @@
 <script>
 import Dapp from "@/util/pixfarmon-dapp";
 import { mapState } from "vuex";
+import { indexToCoor } from "@/util";
 import Repository from "../repository.vue";
 
 export default {
@@ -36,15 +37,30 @@ export default {
       this.dialog = true;
     },
     doSowing(item) {
-      const { x, y } = this.$i2xy(this.field);
+      this.$debug(item, this.field);
+      const { x, y } = indexToCoor(this.field);
+      this.$log(x, y);
       const { itemTag } = item;
-      Dapp.field.sowing(this.address, { x, y, itemTag }, error => {
+      Dapp.field.sowing(this.address, { x, y, seedTag: itemTag }, error => {
         if (error) {
-          console.log(error);
+          this.$error(error);
         } else {
-          console.log("SUccess");
+          this.$log("Success");
         }
       });
+    },
+    updateRepository() {
+      Dapp.repository.getItemList(
+        this.address,
+        { type: 0, user: this.address, target: this.address },
+        (err, list) => {
+          if (err) {
+            this.$error(err);
+          } else {
+            this.$log(list);
+          }
+        }
+      );
     }
   },
   computed: {

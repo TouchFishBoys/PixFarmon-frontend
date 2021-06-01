@@ -160,13 +160,13 @@ export default {
       }
       this.connecting = true;
       this.connect().then(() => {
-        console.log("Connecting");
+        this.$log("Connecting");
         this.connecting = false;
         this.metamaskInstalled = true;
         this.accountConnected = true;
         Dapp.account.login(this.address, (error, username) => {
           if (error) {
-            console.log("May not registered", error);
+            this.$error("May not registered", error);
           } else {
             this.formRegister.username = username;
             this.$store.commit("account/login", this.address, username);

@@ -9,6 +9,7 @@
   },
   "dependencies": {
     "@mdi/font": "^5.9.55",
+    "@metamask/detect-provider": "^1.2.0",
     "@truffle/contract": "^4.3.16",
     "core-js": "^3.6.5",
     "fs": "^0.0.1-security",

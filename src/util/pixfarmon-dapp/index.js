@@ -1,19 +1,24 @@
 import PixfarmJSON from "./Pixfarmon/build/contracts/PixFarm.json";
 import FarmMarketJSON from "./Pixfarmon/build/contracts/FarmMarket.json";
+import RepositoryJSON from "./Pixfarmon/build/contracts/Repository.json";
+import myConsole from "../my-console";
 
 let Pixfarm = null;
 let FarmMarket = null;
+let Repository = null;
 
 const updateWeb3 = web3 => {
   Pixfarm = new web3.eth.Contract(
     PixfarmJSON.abi,
-    "0xc26974d08BBA131F3bb9e9563C39EbAe2DbA73c0"
-    // "0x98f92B68FF85b1A48fC8AA204432DA3ca94d4a2F"
+    "0x0eE310AC6d2219B40e2BE4091A2aB5e6717eeC77"
   );
   FarmMarket = new web3.eth.Contract(
     FarmMarketJSON.abi,
-    "0x7414Ce4075E35b907f285588898DC315Ee383e3A"
-    // "0x40a7E38f7e15D311d33D6BEa09B9Da92988568da"
+    "0x359B6C71Ad8De2fe2066807E399B7D108af49B0D"
+  );
+  Repository = new web3.eth.Contract(
+    RepositoryJSON.abi,
+    "0x31e4DcdB9291DB9555aA87f4796c87B19e4CC399"
   );
 };
 
@@ -28,26 +33,18 @@ const getFields = async (sender, { address }, callback) => {
   }
 };
 
-const getItemList = async (sender, { type, user, target }, callback) => {
-  try {
-    const items = await Pixfarm.methods
-      .getItemList(type, user, target)
-      .call({ from: sender });
-    callback(null, items);
-  } catch (error) {
-    callback(error, null);
-  }
+const getItemList = async (sender, { type, user, target }) => {
+  myConsole.log("fetching item list of ", sender);
+  const items = await Repository.methods
+    .getItemList(type, user, target)
+    .call({ from: sender });
+  return items;
 };
 
-const getFriendList = async (sender, callback) => {
-  try {
-    const friends = await Pixfarm.methods
-      .getFriendList()
-      .call({ from: sender });
-    callback(null, friends);
-  } catch (error) {
-    callback(error, null);
-  }
+const getFriendList = async sender => {
+  myConsole.log("Fetching friend list of", sender);
+  const friends = await Pixfarm.methods.getFriendList().call({ from: sender });
+  return friends;
 };
 
 const acceptFriend = async (sender, { index }, callback) => {
@@ -94,22 +91,15 @@ const recharge = async (sender, { amount }, callback) => {
   }
 };
 
-const buySeed = async (sender, { specie, level, amount }, callback) => {
-  try {
-    const price = await FarmMarket.methods
-      .getSeedValue(specie, level)
-      .call({ from: sender });
-    await Pixfarm.methods
-      .BuySeedFromShop(specie, level, amount)
-      .send({ from: sender, value: price });
-    callback();
-  } catch (error) {
-    callback(error);
-  }
+const buySeed = async (sender, { specie, level, amount }) => {
+  await FarmMarket.methods
+    .buySeed(specie, level, amount)
+    .send({ from: sender });
 };
 
 const sowing = async (sender, { x, y, seedTag }, callback) => {
   try {
+    myConsole.log(`Sowing seed ${seedTag} at ${x},${y}`);
     const success = await Pixfarm.methods
       .sowing(x, y, seedTag)
       .send({ from: sender });
@@ -123,13 +113,9 @@ const sowing = async (sender, { x, y, seedTag }, callback) => {
   }
 };
 
-const harvest = async (sender, { x, y }, callback) => {
-  try {
-    await Pixfarm.methods.harvest(x, y).send({ from: sender });
-    callback();
-  } catch (error) {
-    callback(error);
-  }
+const harvest = async (sender, { x, y }) => {
+  myConsole.debug("Harvesting", x, y);
+  await Pixfarm.methods.harvest(x, y).send({ from: sender });
 };
 
 const steal = async (sender, { player, x, y }, callback) => {
@@ -143,13 +129,8 @@ const steal = async (sender, { player, x, y }, callback) => {
   }
 };
 
-const eradicate = async (sender, { x, y }, callback) => {
-  try {
-    await Pixfarm.methods.eradicate(x, y).send({ from: sender });
-    callback();
-  } catch (error) {
-    callback(error, null);
-  }
+const eradicate = async (sender, { x, y }) => {
+  await Pixfarm.methods.eradicate(x, y).send({ from: sender });
 };
 
 const disassemble = async (sender, { fruitTag }, callback) => {
@@ -167,18 +148,12 @@ const disassemble = async (sender, { fruitTag }, callback) => {
   }
 };
 
-const register = async (sender, { username }, callback) => {
-  try {
-    const success = await Pixfarm.methods
-      .register(username)
-      .send({ from: sender });
-    if (success) {
-      callback();
-    } else {
-      callback(new Error("Register failed"));
-    }
-  } catch (error) {
-    callback(error);
+const register = async (sender, { username }) => {
+  const success = await Pixfarm.methods
+    .register(username)
+    .send({ from: sender });
+  if (!success) {
+    throw new Error("Register failed");
   }
 };
 

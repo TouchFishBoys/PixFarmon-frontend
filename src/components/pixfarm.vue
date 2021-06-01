@@ -1,11 +1,14 @@
 <template>
   <div class="pixfarm-app">
     <FriendPanel />
+    <Shop ref="seedShop" />
     <SowingDialog ref="sowing" />
     <div class="island-container">
+      <div class="shop-btn" @click.stop="$refs.seedShop.showShop()"></div>
       <div class="fields-container">
         <Field
           v-for="index in Array.from(Array(36).keys())"
+          :fieldTime="time"
           :fieldData="fields[index]"
           :fieldIndex="index"
           :key="index"
@@ -21,19 +24,30 @@
 <script>
 import Field from "@/components/pixfarm/field.vue";
 import dapp from "@/util/pixfarmon-dapp";
-import { mapState } from "vuex";
+import { indexToCoor } from "@/util";
+import { mapState, mapActions } from "vuex";
 import FriendPanel from "./friend-panel.vue";
 import SowingDialog from "./pixfarm/sowing-dialog.vue";
+import Shop from "./pixfarm/shop.vue";
+// import Shop from "./pixfarm/shop.vue";
 
 export default {
   name: "Pixfarm",
-  components: { Field, FriendPanel, SowingDialog },
+  components: { Field, FriendPanel, SowingDialog, Shop },
   data() {
     return {
       selectedIndex: -1,
       loading: true,
-      fields: []
+      fields: [],
+      time: 0,
+      shopDialog: false
     };
+  },
+  watch: {
+    address() {
+      this.$log("address changed");
+      this.loadFields();
+    }
   },
   computed: {
     ...mapState("account", {
@@ -41,6 +55,7 @@ export default {
     })
   },
   methods: {
+    ...mapActions("account", ["connect"]),
     calcCssLocation(index) {
       const x = Math.floor(index / 6);
       const y = index % 6;
@@ -53,7 +68,7 @@ export default {
       return css;
     },
     fieldClick(param) {
-      console.log("field clicked:", param);
+      this.$log("field clicked:", param);
       if (param === this.selectedIndex) {
         this.selectedIndex = -1;
       } else {
@@ -61,36 +76,58 @@ export default {
       }
     },
     loadFields() {
-      dapp.field.getFields(
-        this.address,
-        {
-          address: this.address
-        },
-        (error, data) => {
-          if (error) {
-            console.log(error);
-          } else {
-            this.$gon("sowingTool", fieldIndex => {
-              this.$refs.sowing.sowing(fieldIndex);
-            });
-            this.$on("harvestTool", fieldIndex => {
-              const { x, y } = this.$i2xy(fieldIndex);
-              dapp.field.harvest(this.address, { x, y }, harvestError => {
-                if (harvestError) {
-                  console.log("Error harvesting", error);
-                } else {
-                  this.loadFields();
-                }
+      if (this.address !== "") {
+        dapp.field.getFields(
+          this.address,
+          {
+            address: this.address
+          },
+          (error, data) => {
+            if (error) {
+              this.$log(error);
+            } else {
+              this.$gon("sowingTool", fieldIndex => {
+                this.$refs.sowing.sowing(fieldIndex);
               });
-            });
-            this.updateFields(data);
+              this.$gon("harvestTool", fieldIndex => {
+                dapp.field
+                  .harvest(this.address, indexToCoor(fieldIndex))
+                  .then(() => {
+                    this.loadFields();
+                  })
+                  .catch(harvestError => {
+                    this.$log("Error harvesting", harvestError);
+                  });
+              });
+              this.$gon("eradicateTool", fieldIndex => {
+                dapp.field
+                  .eradicate(this.address, indexToCoor(fieldIndex))
+                  .then(() => {
+                    this.loadFields();
+                  })
+                  .catch(eradicateError => {
+                    this.$log("Error eradicating", eradicateError);
+                  });
+              });
+              this.$gon("refreshField", () => {
+                this.loadFields();
+              });
+              this.updateFields(data);
+            }
           }
-        }
-      );
+        );
+      } else {
+        this.connect().then(() => {
+          this.$emit("connected");
+          this.$log("Connect successfully");
+        });
+      }
     },
     updateFields(fieldsData) {
-      this.fields = fieldsData.flat();
-      console.log(this.fields);
+      this.fields = fieldsData[1].flat();
+      this.time = parseInt(fieldsData[0], 10);
+      this.$log("Fields:", this.fields);
+      this.$log("Time in the blockchain", this.time);
     }
   },
   created() {
@@ -100,17 +137,27 @@ export default {
 </script>
 
 <style scoped>
+.shop-btn {
+  position: absolute;
+  z-index: 20;
+  cursor: pointer;
+  width: 125px;
+  height: 75px;
+  left: 145px;
+  top: 325px;
+}
 .pixfarm-app {
   margin: auto;
   width: 896px;
   height: 896px;
 }
 .island-container {
+  position: relative;
   height: 896px;
   background-image: url("~@/assets/pixfarm-island.gif");
 }
 .fields-container {
-  position: relative;
+  position: absolute;
   left: 160px;
   top: 336.5px;
   width: 384px;

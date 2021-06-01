@@ -29,6 +29,10 @@ export default {
       type: Number,
       // 0:Locked 1:Empty 2:growing 3:maturation
       default: 0
+    },
+    fieldIndex: {
+      type: Number,
+      default: -1
     }
   },
   data() {
@@ -59,7 +63,7 @@ export default {
   },
   methods: {
     toolClicked(toolName) {
-      this.$gemit(`${toolName}Tool`);
+      this.$gemit(`${toolName}Tool`, this.fieldIndex);
     }
   }
 };

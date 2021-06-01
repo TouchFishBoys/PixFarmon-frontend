@@ -3,7 +3,11 @@
     <div class="response-area" @click="onFieldClick" :style="responseAreaCss" />
     <div class="hover-img" />
     <div class="selected-box" :class="{ unselected: !selected }">
-      <tool-box :selected="selected" :fieldType="fieldType" />
+      <tool-box
+        :selected="selected"
+        :fieldType="fieldType"
+        :fieldIndex="fieldIndex"
+      />
       <div class="selected-img" />
     </div>
     <img class="field-img" :src="fieldImage" />
@@ -11,8 +15,9 @@
 </template>
 
 <script>
-import Dapp from "@/util/pixfarmon-dapp";
+// import Dapp from "@/util/pixfarmon-dapp";
 import { mapState } from "vuex";
+import util from "@/util";
 import ToolBox from "./toolbox.vue";
 
 export default {
@@ -20,6 +25,7 @@ export default {
   components: { ToolBox },
   props: {
     fieldIndex: Number,
+    fieldTime: Number,
     fieldData: Array,
     selected: {
       type: Boolean,
@@ -41,6 +47,15 @@ export default {
       }
       if (!this.fieldData.used) {
         return 1;
+      }
+      if (
+        util.calPlantAge(
+          this.fieldData.sowingTime,
+          this.fieldData.maturityTime,
+          this.fieldTime
+        ) === 3
+      ) {
+        return 3;
       }
       return 2;
     },
@@ -66,27 +81,32 @@ export default {
       this.$emit("click", this.fieldIndex);
     },
     getPlantImage(seedTag, sowingTime, maturityTime) {
-      console.log(seedTag, sowingTime, maturityTime);
-      return "";
+      this.$log(
+        "Getting plant image at",
+        this.fieldIndex,
+        "seedTag:",
+        seedTag,
+        ",",
+        "sowingTime:",
+        sowingTime,
+        "maturityTime:",
+        maturityTime
+      );
+      const age = util.calPlantAge(sowingTime, maturityTime, this.fieldTime);
+      const url = `/imgs/plants/${util.calSeedType(seedTag)}s${age}.png`;
+      this.$log(url);
+      return url;
     }
   },
-  mounted() {
-    Dapp.field.getFields(
-      this.address,
-      { address: this.address },
-      (error, fields) => {
-        if (error) {
-          console.log("Get fields failed");
-        } else {
-          this.fields = fields;
-        }
-      }
-    );
-  }
+  mounted() {}
 };
 </script>
 
 <style lang="scss" scoped>
+@import "~@/assets/style.scss";
+div {
+  @include unselectable;
+}
 .response-area {
   position: absolute;
   z-index: 100;

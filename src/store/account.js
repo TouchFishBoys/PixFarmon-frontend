@@ -1,4 +1,5 @@
-import dapp from "@/util/pixfarmon-dapp";
+// import dapp from "@/util/pixfarmon-dapp";
+import myConsole from "@/util/my-console";
 
 const mutations = {
   connect(state, address) {
@@ -11,7 +12,6 @@ const mutations = {
 };
 
 const actions = {
-  // Only update
   connect({ commit }) {
     return new Promise((resolve, reject) => {
       if (window.ethereum) {
@@ -19,56 +19,28 @@ const actions = {
           .request({ method: "eth_requestAccounts" })
           .then(accounts => {
             const [account] = accounts;
-            console.log("Connected", account);
+            myConsole.log("Connected", account);
             commit("connect", account);
             resolve();
+            // TODO 判断是否已注册，如果没有注册
           });
       } else {
-        reject();
+        reject(new Error("No ethereum client found"));
       }
-    });
-  },
-  // Should make isLogged to be true
-  login({ commit, state }) {
-    const [address] = state;
-    console.log("logging in");
-    dapp.account.login(address, (error, username) => {
-      if (!error) {
-        commit("login", address, username);
-      } else {
-        console.log("Error when login", error);
-      }
-    });
-  },
-  // Register account, if success, login
-  register({ commit, state }, username) {
-    const { address } = state;
-    return new Promise((resolve, reject) => {
-      dapp.account.register(address, { username }, error => {
-        if (error) {
-          console.log("Error when register", error);
-          reject(error);
-        } else {
-          console.log("Register success");
-          commit("login", address, username);
-          resolve();
-        }
-      });
     });
   }
 };
 
 const getters = {
   isLogged: state => {
-    return state.username !== "";
+    return state.address !== "";
   }
 };
 
 export default {
   namespaced: true,
   state: () => ({
-    username: "",
-    address: "0x6d80aAC61F6d92c7F4A3c412850474ba963B698E"
+    address: ""
   }),
   mutations,
   actions,

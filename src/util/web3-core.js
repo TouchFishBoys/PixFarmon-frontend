@@ -1,19 +1,15 @@
 import Web3 from "web3";
-import Dapp from "../pixfarmon-dapp";
+import Dapp from "./pixfarmon-dapp";
+import myConsole from "./my-console";
 
 let web3Default;
 let web3SKALE;
 
 const getWeb3 = async () => {
   window.ethereum.autoRefreshOnNetworkChange = false;
-  if (window.ethereum) {
-    console.log("window.ethereum");
+  if (typeof window.ethereum !== "undefined") {
+    myConsole.log("using window.ethereum");
     web3Default = new Web3(window.ethereum);
-    web3SKALE = new Web3(
-      new Web3.providers.HttpProvider(process.env.VUE_APP_SKALE_CHAIN)
-    );
-  } else if (window.web3) {
-    web3Default = new Web3(window.web3);
     web3SKALE = new Web3(
       new Web3.providers.HttpProvider(process.env.VUE_APP_SKALE_CHAIN)
     );
@@ -28,8 +24,7 @@ const getWeb3 = async () => {
 };
 
 export default {
-  install(Vue, options) {
-    console.log(options);
+  install(Vue) {
     getWeb3();
     Vue.prototype.$web3 = getWeb3;
   },
