@@ -10,15 +10,15 @@ let Repository = null;
 const updateWeb3 = web3 => {
   Pixfarm = new web3.eth.Contract(
     PixfarmJSON.abi,
-    "0xCF5Ad65717C902c7761CB993Bf1CA75269976201"
+    "0x17C98dD7179839b3685Ed5d121f9692fb6E6A346"
   );
   FarmMarket = new web3.eth.Contract(
     FarmMarketJSON.abi,
-    "0xd6263e0cC6A398136397cC96Dc0fe1280AD92f6F"
+    "0x32Cea6a07055F447D7133851E9D3E3bDc0a3f3e0"
   );
   Repository = new web3.eth.Contract(
     RepositoryJSON.abi,
-    "0xbA12c38bF48CeBa5Da64e13574c98E6af0FD1f64"
+    "0xe1cC66a359F240126bDf808B005A1BbE4C9062A6"
   );
 };
 
