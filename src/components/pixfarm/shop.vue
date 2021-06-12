@@ -2,7 +2,7 @@
   <v-dialog width="400px" v-model="dialog" persistent>
     <v-card>
       <v-card-title>
-        Seed Shop
+        Seed Shop <v-spacer></v-spacer> Balance: {{ money }}
       </v-card-title>
       <v-sheet class="ma-4">
         <v-row v-for="(specieRow, specieIndex) in species" :key="specieIndex">
@@ -69,7 +69,8 @@ export default {
         [4, 5, 6, 7]
       ],
       selectedSpecie: 0,
-      amount: 0
+      amount: 0,
+      money: 0
     };
   },
   computed: {
@@ -104,8 +105,17 @@ export default {
         })
         .then(() => {
           console.log("OK");
+          this.updateMoney();
         });
+    },
+    updateMoney() {
+      Dapp.repository.getMoney(this.address).then(money => {
+        this.money = money;
+      });
     }
+  },
+  mounted() {
+    this.updateMoney();
   }
 };
 </script>

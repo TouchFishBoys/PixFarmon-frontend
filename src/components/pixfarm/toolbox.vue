@@ -57,6 +57,10 @@ export default {
           key: "eradicate",
           icon: require("@/assets/btn-eradicate.gif"),
           usable: this.fieldType >= 2
+        },
+        {
+          key: "unlock",
+          usable: this.fieldType === 0
         }
       ];
     }

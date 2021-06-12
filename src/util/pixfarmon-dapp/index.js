@@ -10,15 +10,15 @@ let Repository = null;
 const updateWeb3 = web3 => {
   Pixfarm = new web3.eth.Contract(
     PixfarmJSON.abi,
-    "0x17C98dD7179839b3685Ed5d121f9692fb6E6A346"
+    "0x84943D3756bd1B62a3D5C4ecaA823334fd0622aa"
   );
   FarmMarket = new web3.eth.Contract(
     FarmMarketJSON.abi,
-    "0x32Cea6a07055F447D7133851E9D3E3bDc0a3f3e0"
+    "0xB3293E36031F620f72807A1a7bFAEd44Fa6Ae273"
   );
   Repository = new web3.eth.Contract(
     RepositoryJSON.abi,
-    "0xe1cC66a359F240126bDf808B005A1BbE4C9062A6"
+    "0x4d832ea29fD9Aca29d032e79aA0Dafa1943Df2a3"
   );
 };
 
@@ -173,6 +173,11 @@ const login = async (sender, callback) => {
   }
 };
 
+const getMoney = async sender => {
+  const money = await Repository.methods.money(sender).call({ from: sender });
+  return money;
+};
+
 export default {
   updateWeb3,
   friend: {
@@ -187,7 +192,8 @@ export default {
   },
   repository: {
     getItemList,
-    disassemble
+    disassemble,
+    getMoney
   },
   economy: {},
   field: {
