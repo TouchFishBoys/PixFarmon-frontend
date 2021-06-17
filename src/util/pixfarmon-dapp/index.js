@@ -39,45 +39,6 @@ const getItemList = async (sender, { type, user, target }) => {
   return items;
 };
 
-const getFriendList = async sender => {
-  myConsole.log("Fetching friend list of", sender);
-  const friends = await Pixfarm.methods.getFriendList().call({ from: sender });
-  return friends;
-};
-
-const acceptFriend = async (sender, { index }, callback) => {
-  try {
-    await Pixfarm.methods.acceptFriend(index).call({ from: sender });
-  } catch (error) {
-    callback(error);
-  }
-};
-
-const refuseFriend = async (sender, { index }, callback) => {
-  try {
-    await Pixfarm.methods.refuseFriend(index).call({ from: sender });
-  } catch (error) {
-    callback(error);
-  }
-};
-
-const addFriend = async (sender, { username, address }, callback) => {
-  try {
-    if (username) {
-      await Pixfarm.methods.AddFriendByName(username).send({ from: sender });
-    } else if (address) {
-      await Pixfarm.methods.AddFriendByAddress(address).call({
-        from: sender
-      });
-    } else {
-      callback(new Error("No given"));
-    }
-    callback();
-  } catch (error) {
-    callback(error);
-  }
-};
-
 const recharge = async (sender, { amount }, callback) => {
   try {
     await Pixfarm.methods
@@ -178,12 +139,6 @@ const getMoney = async sender => {
 
 export default {
   updateWeb3,
-  friend: {
-    getFriendList,
-    acceptFriend,
-    refuseFriend,
-    addFriend
-  },
   farm: {
     buySeed,
     recharge
