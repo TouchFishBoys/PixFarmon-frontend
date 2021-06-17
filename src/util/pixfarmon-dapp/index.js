@@ -22,11 +22,9 @@ const updateWeb3 = web3 => {
   );
 };
 
-const getFields = async (sender, { address }, callback) => {
+const getFields = async (sender, callback) => {
   try {
-    const fields = await Pixfarm.methods
-      .getFields(address)
-      .call({ from: sender });
+    const fields = await Pixfarm.methods.getFields().call({ from: sender });
     callback(null, fields);
   } catch (error) {
     callback(error, null);
