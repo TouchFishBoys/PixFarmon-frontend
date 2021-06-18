@@ -64,10 +64,7 @@ export default {
     return {
       dialog: false,
       maxLevel: 4,
-      species: [
-        [0, 1, 2, 3],
-        [4, 5, 6, 7]
-      ],
+      species: [[1, 2, 3, 4]],
       selectedSpecie: 0,
       amount: 0,
       money: 0
