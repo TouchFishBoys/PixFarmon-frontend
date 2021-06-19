@@ -77,45 +77,39 @@ export default {
     },
     loadFields() {
       if (this.address !== "") {
-        dapp.field.getFields(
-          this.address,
-          {
-            address: this.address
-          },
-          (error, data) => {
-            if (error) {
-              this.$log(error);
-            } else {
-              this.$gon("sowingTool", fieldIndex => {
-                this.$refs.sowing.sowing(fieldIndex);
-              });
-              this.$gon("harvestTool", fieldIndex => {
-                dapp.field
-                  .harvest(this.address, indexToCoor(fieldIndex))
-                  .then(() => {
-                    this.loadFields();
-                  })
-                  .catch(harvestError => {
-                    this.$log("Error harvesting", harvestError);
-                  });
-              });
-              this.$gon("eradicateTool", fieldIndex => {
-                dapp.field
-                  .eradicate(this.address, indexToCoor(fieldIndex))
-                  .then(() => {
-                    this.loadFields();
-                  })
-                  .catch(eradicateError => {
-                    this.$log("Error eradicating", eradicateError);
-                  });
-              });
-              this.$gon("refreshField", () => {
-                this.loadFields();
-              });
-              this.updateFields(data);
-            }
+        dapp.field.getFields(this.address, (error, data) => {
+          if (error) {
+            this.$log(error);
+          } else {
+            this.$gon("sowingTool", fieldIndex => {
+              this.$refs.sowing.sowing(fieldIndex);
+            });
+            this.$gon("harvestTool", fieldIndex => {
+              dapp.field
+                .harvest(this.address, indexToCoor(fieldIndex))
+                .then(() => {
+                  this.loadFields();
+                })
+                .catch(harvestError => {
+                  this.$log("Error harvesting", harvestError);
+                });
+            });
+            this.$gon("eradicateTool", fieldIndex => {
+              dapp.field
+                .eradicate(this.address, indexToCoor(fieldIndex))
+                .then(() => {
+                  this.loadFields();
+                })
+                .catch(eradicateError => {
+                  this.$log("Error eradicating", eradicateError);
+                });
+            });
+            this.$gon("refreshField", () => {
+              this.loadFields();
+            });
+            this.updateFields(data);
           }
-        );
+        });
       } else {
         this.connect().then(() => {
           this.$emit("connected");
@@ -154,7 +148,7 @@ export default {
 .island-container {
   position: relative;
   height: 896px;
-  background-image: url("~@/assets/pixfarm-island.gif");
+  background-image: url("~@/assets/pixfarm-island.webp");
 }
 .fields-container {
   position: absolute;
@@ -166,7 +160,7 @@ export default {
 .water {
   width: 896px;
   height: calc(100vh - 896px);
-  background-image: url("~@/assets/water.gif");
+  background-image: url("~@/assets/water.webp");
   background-repeat: repeat-y;
 }
 </style>

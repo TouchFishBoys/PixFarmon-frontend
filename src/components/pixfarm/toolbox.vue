@@ -45,17 +45,17 @@ export default {
       return [
         {
           key: "harvest",
-          icon: require("@/assets/btn-harvest.gif"),
+          icon: require("@/assets/btn-harvest.webp"),
           usable: this.fieldType === 3
         },
         {
           key: "sowing",
-          icon: require("@/assets/btn-sowing.gif"),
+          icon: require("@/assets/btn-sowing.webp"),
           usable: this.fieldType === 1
         },
         {
           key: "eradicate",
-          icon: require("@/assets/btn-eradicate.gif"),
+          icon: require("@/assets/btn-eradicate.webp"),
           usable: this.fieldType >= 2
         },
         {

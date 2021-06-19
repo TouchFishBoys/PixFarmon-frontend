@@ -42,10 +42,7 @@ export default {
   },
   computed: {
     fieldType() {
-      if (!this.fieldData || !this.fieldData.unlocked) {
-        return 0;
-      }
-      if (!this.fieldData.used) {
+      if (!this.fieldData || this.fieldData.specie === "0") {
         return 1;
       }
       if (
@@ -60,10 +57,7 @@ export default {
       return 2;
     },
     fieldImage() {
-      if (!this.fieldData || !this.fieldData.unlocked) {
-        return `${this.publicPath}imgs/field-weed.png`;
-      }
-      if (!this.fieldData.used) {
+      if (!this.fieldData || this.fieldData.specie === "0") {
         return `${this.publicPath}imgs/field-empty.png`;
       }
       return this.getPlantImage(
@@ -165,7 +159,7 @@ div {
     width: 64px;
     height: 64px;
     bottom: 0px;
-    background-image: url("~@/assets/field-selected.gif");
+    background-image: url("~@/assets/field-selected.webp");
   }
   .tools-box {
     position: absolute;
@@ -175,7 +169,7 @@ div {
       z-index: 105;
       width: 48px;
       height: 48px;
-      background: url("~@/assets/btn-sowing.gif");
+      background: url("~@/assets/btn-sowing.webp");
     }
   }
 }
@@ -185,7 +179,7 @@ div {
   height: 64px;
   width: 64px;
   z-index: 12;
-  background-image: url("~@/assets/field-weed-hover.gif");
+  background-image: url("~@/assets/field-weed-hover.webp");
 }
 .response-area:hover + .hover-img {
   display: block;
