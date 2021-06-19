@@ -16,9 +16,6 @@ module.exports = {
     if (process.env.NODE_ENV === "production") {
       config.plugins.delete("prefetch");
       config.externals({
-        vue: "Vue",
-        vuex: "Vuex",
-        "vue-router": "VueRouter",
         web3: "web3"
       });
     }
