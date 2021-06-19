@@ -118,7 +118,7 @@ const register = async (sender, { username }) => {
 
 const login = async (sender, callback) => {
   try {
-    console.log(sender);
+    myConsole.log(sender);
     const username = await Pixfarm.methods
       .getUsername(sender)
       .call({ from: sender });

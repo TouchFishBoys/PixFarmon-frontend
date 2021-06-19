@@ -93,6 +93,6 @@ export default {
    */
   CURRENT_TIME_ETH,
   getItemSpecie: tag => {
-    console.log(tag);
+    this.$log(tag);
   }
 };

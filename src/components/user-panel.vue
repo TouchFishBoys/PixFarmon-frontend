@@ -50,7 +50,7 @@ export default {
           this.$gemit("refreshField");
         })
         .catch(error => {
-          console.log(error);
+          this.$log(error);
         });
     }
   }

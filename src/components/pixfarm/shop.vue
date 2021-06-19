@@ -101,7 +101,7 @@ export default {
           amount: this.amount
         })
         .then(() => {
-          console.log("OK");
+          this.$log("OK");
           this.updateMoney();
         });
     },
