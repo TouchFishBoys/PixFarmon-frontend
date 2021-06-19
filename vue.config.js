@@ -11,5 +11,16 @@ module.exports = {
         "@dapp": "@/util/pixfarmon-dapp"
       }
     }
+  },
+  chainWebpack: config => {
+    if (process.env.NODE_ENV === "production") {
+      config.plugins.delete("prefetch");
+      config.externals({
+        vue: "vue",
+        vuex: "vuex",
+        "vue-router": "vue-router",
+        web3: "web3"
+      });
+    }
   }
 };
