@@ -1,3 +1,4 @@
 [submodule "src/util/pixfarmon-dapp/Pixfarmon"]
 	path = src/util/pixfarmon-dapp/Pixfarmon
-	url = git://github.com/TouchFishBoys/Pixfarm
+	url = https://github.com/TouchFishBoys/Pixfarm.git
+	branch = main
