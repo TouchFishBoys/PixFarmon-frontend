@@ -1,6 +1,6 @@
 module.exports = {
   transpileDependencies: ["vuetify"],
-  productionSourceMap: process.env.NODE_ENV !== "production",
+  productionSourceMap: false,
   configureWebpack: {
     devtool: process.env.NODE_ENV === "production" ? undefined : "source-map",
     resolve: {

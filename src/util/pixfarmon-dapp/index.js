@@ -1,13 +1,14 @@
+import myConsole from "../my-console";
+
 import PixfarmJSON from "./Pixfarmon/build/contracts/PixFarm.json";
 import FarmMarketJSON from "./Pixfarmon/build/contracts/FarmMarket.json";
 import RepositoryJSON from "./Pixfarmon/build/contracts/Repository.json";
-import myConsole from "../my-console";
 
 let Pixfarm = null;
 let FarmMarket = null;
 let Repository = null;
 
-const updateWeb3 = web3 => {
+const updateWeb3 = async web3 => {
   Pixfarm = new web3.eth.Contract(
     PixfarmJSON.abi,
     "0xf9a0CA48ad04C4c405e79b9F2D1F709Aae28280D"

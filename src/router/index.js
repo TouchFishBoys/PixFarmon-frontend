@@ -1,7 +1,5 @@
 import Vue from "vue";
 import VueRouter from "vue-router";
-import Main from "@/views/Main.vue";
-import NotFound from "@/views/NotFound.vue";
 
 Vue.use(VueRouter);
 
@@ -9,23 +7,17 @@ const routes = [
   {
     path: "/",
     name: "main",
-    component: Main,
+    component: () =>
+      import(/* webpackChunkName: "pixfarm-main" */ "@/views/Main.vue"),
     meta: {
       title: "Pixfarmon"
     }
   },
-  // {
-  //   path: "/connect",
-  //   name: "connect",
-  //   component: () => import("@/views/Connect"),
-  //   meta: {
-  //     title: "Connect to wallet"
-  //   }
-  // },
   {
     path: "*",
     name: "404",
-    component: NotFound,
+    component: () =>
+      import(/* webpackChunkName: "not-found" */ "@/views/NotFound.vue"),
     meta: {
       title: "404"
     }

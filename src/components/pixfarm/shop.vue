@@ -34,18 +34,6 @@
           v-model.number="amount"
           dense
         >
-          <!-- <template v-slot:prepend-inner>
-            <v-btn @click="amount = amount - 10" small :disabled="amount < 10"
-              >--</v-btn
-            >
-            <v-btn @click="amount = amount - 1" small :disabled="amount <= 0"
-              >-</v-btn
-            >
-          </template>
-          <template v-slot:append>
-            <v-btn @click="amount = parseInt(amount) + 1" small>+</v-btn>
-            <v-btn @click="amount = parseInt(amount) + 10" small>++</v-btn>
-          </template> -->
         </v-text-field>
         <v-spacer></v-spacer>
         <v-btn color="primary" @click="buySeed"> Buy</v-btn>
