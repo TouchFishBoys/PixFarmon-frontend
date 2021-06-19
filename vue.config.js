@@ -17,7 +17,7 @@ module.exports = {
       config.plugins.delete("prefetch");
       config.externals({
         vue: "Vue",
-        vuex: "vuex",
+        vuex: "Vuex",
         "vue-router": "VueRouter",
         web3: "web3"
       });
