@@ -1,2 +1,2 @@
 # Pixfarmon-frontend
-Frontend of ethereum game [PixFarmon](https://github.com/TouchFishBoys/Pixfarmon)
+Frontend of ethereum game [PixFarm](https://github.com/TouchFishBoys/Pixfarm)
