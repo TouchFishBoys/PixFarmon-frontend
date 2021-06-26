@@ -107,7 +107,7 @@ export default {
         page: this.page,
         rowIndex,
         colIndex,
-        itemTag: item.tag
+        itemTag: item.specie
       });
     },
     loadItems() {

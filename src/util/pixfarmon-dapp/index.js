@@ -51,10 +51,8 @@ const recharge = async (sender, { amount }, callback) => {
   }
 };
 
-const buySeed = async (sender, { specie, level, amount }) => {
-  await FarmMarket.methods
-    .buySeed(specie, level, amount)
-    .send({ from: sender });
+const buySeed = async (sender, { specie, amount }) => {
+  await FarmMarket.methods.buySeed(specie, amount).send({ from: sender });
 };
 
 const sowing = async (sender, { x, y, seedTag }, callback) => {

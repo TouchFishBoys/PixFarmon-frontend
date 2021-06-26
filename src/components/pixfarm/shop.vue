@@ -85,7 +85,6 @@ export default {
       Dapp.farm
         .buySeed(this.address, {
           specie: this.selectedSpecie,
-          level: 0,
           amount: this.amount
         })
         .then(() => {

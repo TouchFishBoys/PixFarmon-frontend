@@ -39,12 +39,5 @@ module.exports = {
       .set("@views", resolve("src/views"))
       .set("@util", resolve("src/util"))
       .set("@dapp", resolve("src/util/pixfarmon-dapp"));
-    if (process.env.NODE_ENV === "production") {
-      config.plugins.delete("prefetch");
-      config.plugin("html").tap(args => {
-        args[0].cdn = cdn;
-        return args;
-      });
-    }
   }
 };

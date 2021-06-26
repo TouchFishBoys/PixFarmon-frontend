@@ -37,11 +37,12 @@ export default {
       this.dialog = true;
     },
     doSowing(item) {
-      this.$debug(item, this.field);
+      this.$debug(item);
       const { x, y } = indexToCoor(this.field);
       this.$log(x, y);
       const { itemTag } = item;
       Dapp.field.sowing(this.address, { x, y, seedTag: itemTag }, error => {
+        this.$log("Sowing:", itemTag);
         if (error) {
           this.$error(error);
         } else {
